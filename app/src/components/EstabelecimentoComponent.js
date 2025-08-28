@@ -1,26 +1,23 @@
 //classe EstabelecimentoComponent
-import { View, Text, TouchableOpacity, useWindowDimensions } from "react-native";
-import { StyleSheet } from "react-native";
-import Estabelecimento from '../classes/Estabelecimento';
-import * as Font from "expo-font";
-import { useEffect, useState } from "react";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import * as Linking from 'expo-linking';
-import { Tab, TabView } from '@rneui/themed';
+import app from '@/app/firebaseConfig';
 import Entypo from '@expo/vector-icons/Entypo';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
+import { Tab, TabView } from '@rneui/themed';
+import * as Font from "expo-font";
+import * as Linking from 'expo-linking';
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { Avatar, Button, Modal, Portal } from "react-native-paper";
+import StarRating from 'react-native-star-rating-widget';
+import Estabelecimento from '../classes/Estabelecimento';
+import Comentarios from "./Comentarios";
 import Imagens from "./Imagens";
 import Videos from "./Videos";
-import Comentarios from "./Comentarios";
-import { Avatar, Button, Modal, Portal } from "react-native-paper";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { firebaseConfig } from "../../firebaseConfig";
-import { doc, getFirestore, updateDoc } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-import StarRating from 'react-native-star-rating-widget';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useLayoutEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
 
 // Componente principal que renderiza os detalhes do estabelecimento selecionado
 const EstabelecimentoComponent = ({ route }) => {
@@ -34,7 +31,7 @@ const EstabelecimentoComponent = ({ route }) => {
       }, [navigation]);
 
     // Inicializa o Firebase e conecta com o banco de dados Firestore
-    const app = initializeApp(firebaseConfig);
+
     const db = getFirestore(app, "(default)");
 
     // Estados para controle do modal de avaliação

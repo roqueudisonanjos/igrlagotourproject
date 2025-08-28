@@ -1,13 +1,11 @@
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { getAuth, signOut } from "firebase/auth";
-import { firebaseConfig } from "../../firebaseConfig";
+import app from "@/app/firebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { initializeApp } from "firebase/app";
+import { getAuth, signOut } from "firebase/auth";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const Menu = ({abrirPerfilMethod, goToLogin}) =>{
 
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
 

@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { firebaseConfig } from '../../../firebaseConfig';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { initializeApp } from "firebase/app";
-import { doc, setDoc } from "firebase/firestore"; 
-import { getFirestore } from "firebase/firestore";
+// Import das bibliotecas utilizadas na classe
+import app from '@/app/firebaseConfig';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { imageNewUserDefault } from '../../constants/imagesFirebase';
 
+// Componente principal da tela de registro, ela seta as informações cedidas pelo usuário
 const RegistrationScreen = ({navigation}) => {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
@@ -16,17 +16,13 @@ const RegistrationScreen = ({navigation}) => {
     const [confirmPassword, setConfirmPassword] = useState('')
 
     // Inicializando firebase
-    const app = initializeApp(firebaseConfig);
     const db=getFirestore(app, "(default)");
-
     // Inicializando a autenticação do firebase e obtendo uma autenticação
     const auth = getAuth(app);
-
     //vaiável para o botão de voltar para a tela de login
     const onFooterLinkPress = () => {
         navigation.navigate('Login')
     }
-
     const criaUserNoBanco = async (uid)=>{
         //try catch para instanciar e confirmar a inserção da nova conta no banco de dados
         try {

@@ -1,11 +1,9 @@
-import React from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { getDistanceBetweenPoints } from '../screens/ExplorarRoute';
 
 const SugestoesComponent = ({sugestoes, estabelecimentos, localUser, clickCard}) => {
-  
-  const arraySugestoes = JSON.parse(sugestoes)
 
   const buildObjectsSugestoes = (arraySugestoes) =>{
     
@@ -14,18 +12,24 @@ const SugestoesComponent = ({sugestoes, estabelecimentos, localUser, clickCard})
     // Percorre cada campo (cada estabelecimento)
     Object.entries(estabelecimentos).forEach(([nomeCampo, valorCampo]) => {
 
-      if (arraySugestoes.includes(parseInt(valorCampo.id))) {
+      if (sugestoes.includes(parseInt(valorCampo.id))) {
         estabelecimentosLista.push({ nomeCampo, ...valorCampo });
       }
     });
 
     return estabelecimentosLista;
   }
+  
+  useEffect(()=>{
+    console.log("sugestoes abaixo")
+    console.log(sugestoes)
+
+  }, [])
 
   return (
     <FlatList
       style={{ marginBottom: 90, paddingHorizontal:10, paddingBottom: 10, marginTop: 20 }}
-      data={buildObjectsSugestoes(arraySugestoes)}
+      data={sugestoes!==null && sugestoes!==undefined ? buildObjectsSugestoes(sugestoes): null}
       keyExtractor={(_, index)=> index}
       renderItem={(i)=>{
 
@@ -43,9 +47,12 @@ const SugestoesComponent = ({sugestoes, estabelecimentos, localUser, clickCard})
               <View style={styles.cardContent}>
                   <Text style={styles.estiloTitulo}>{item.nome}</Text>
                   <Text style={styles.estiloDescricao}>{item.descricao}</Text>
-                  <Text style={styles.estiloDistancia}>
-                      A {getDistanceBetweenPoints(localUser.latitude, localUser.longitude, item.localizacao.latitude, item.localizacao.longitude, "kilometers")} KM de você
-                  </Text>
+                  {localUser!==undefined && localUser!==null && item.localizacao !==undefined && item.localizacao !==null ?
+                    <Text style={styles.estiloDistancia}>
+                        A {getDistanceBetweenPoints(localUser.latitude, localUser.longitude, item.localizacao.latitude, item.localizacao.longitude, "kilometers")} KM de você
+                    </Text>
+                    : null
+                  }
               </View>
           </Card>
         )

@@ -1,18 +1,16 @@
+import app from '@/app/firebaseConfig';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from '@react-navigation/native';
+import * as Location from 'expo-location';
+import { collection, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
 import * as React from 'react';
-import { View} from 'react-native';
+import { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import EventosRoute from '../screens/EventosRoute';
 import ExplorarRoute from '../screens/ExplorarRoute';
-import {useState, useEffect} from 'react';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getDocs, collection, doc, getDoc } from "firebase/firestore";
-import { firebaseConfig } from "../../firebaseConfig";
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import * as Location from 'expo-location';
-import FloatingMenu from './FloatingMenu'; // Importando o FloatingMenu
 import Home from '../screens/HomeRoute';
-import { useFocusEffect } from '@react-navigation/native';
 import Roteiros from '../screens/RoteirosRoute';
+import FloatingMenu from './FloatingMenu'; // Importando o FloatingMenu
 
 const MainComponent = ({navigation}) => {
 
@@ -66,7 +64,6 @@ const MainComponent = ({navigation}) => {
     }
   };
 
-  const app = initializeApp(firebaseConfig); // Initializa o Firebase
   const DB=getFirestore(app, "(default)"); //Obtém referência ao Firestore
   const [location, setLocation] = useState(null); // Estado para armazenar a localização do usuário
   const [nomeColecao, setNomeColecao] = useState(""); // Nome da coleção Firestore (dependente da localização do usuário)
@@ -122,6 +119,8 @@ const MainComponent = ({navigation}) => {
 
     } catch (error) {    
         console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity e="+error);
+        console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity DB="+DB);
+        console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity app="+nomeColecao);
     }
   }
 
@@ -157,12 +156,12 @@ const MainComponent = ({navigation}) => {
       const usuarioOnStorage = await AsyncStorage.getItem("user");
   
       if (usuarioOnStorage!==null) {
-        const usuario = await JSON.parse(usuarioOnStorage);
-
-        setUser(usuario);
+        const usuario = usuarioOnStorage ? JSON.parse(usuarioOnStorage) : null;
 
         console.log("C=MainComponent M=getUser m=Usuário encontrado usuario=");
         console.log(usuario);
+
+        setUser(usuario);
 
       } else {
         console.log("C=MainComponent M=getUser m=Nenhum usuário encontrado!");
@@ -196,7 +195,7 @@ const MainComponent = ({navigation}) => {
   useEffect(()=>{
     console.log("cidade escolhida")
     console.log(nomeColecao)
-    if(nomeColecao!=="") {
+    if(nomeColecao!=="" && nomeColecao!=null) {
       loadAllItemsFromCollectionOfMyCity();
     }
     else{
@@ -208,7 +207,7 @@ const MainComponent = ({navigation}) => {
   //useEffect que seta a localização do usuário dizendo em que municipio ele esta, isso é importante para a comunicação com o banco de dados
   useEffect(()=>{
     const getCoordinates = async()=>{
-      if (location !== null){
+      if (location !== null && location !== undefined){
         const localizacao = {latitude: location.coords.latitude, longitude: location.coords.longitude};
         setLocalUser(localizacao);
       }    

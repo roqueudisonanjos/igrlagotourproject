@@ -1,16 +1,13 @@
 //classe PerfilRoute
-import { View, Text, Button } from "react-native"
-import { Avatar } from "react-native-paper"
-import { StyleSheet } from "react-native"
-import Usuario from '../classes/Usuario';
-import { initializeApp } from "firebase/app";
+import app from '@/app/firebaseConfig';
 import { getAuth, signOut } from "firebase/auth";
-import { firebaseConfig } from "../../firebaseConfig";
+import { Button, StyleSheet, Text, View } from "react-native";
+import { Avatar } from "react-native-paper";
+import Usuario from '../classes/Usuario';
 
 const PerfilRoute=({navigation})=>{
     const usuario = new Usuario("Nome:", "Sobrenome:", 25, "11/08/1998", "wesley@gmail.com", 94999030066)
 
-    const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
     const signOutPress = () =>{

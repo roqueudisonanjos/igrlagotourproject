@@ -17,3 +17,5 @@ getToken(messaging, { vapidKey: 'U3Sxz__-UIaN9eaywnt9DDRmqmssMQd7vMjxy2abCG4' })
   console.log('An error occurred while retrieving token. ', err);
   // ...
 });
+
+export default messaging;

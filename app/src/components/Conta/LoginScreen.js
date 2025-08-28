@@ -1,14 +1,12 @@
 
-import React, { useState, useEffect } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View} from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StyleSheet } from 'react-native';
-import { firebaseConfig } from '../../../firebaseConfig';
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
-import { getFirestore,doc,getDoc } from "firebase/firestore";
-import { GoogleAuthProvider,signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
+import app from '@/app/firebaseConfig';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 // criação da tela de login, pegando as informações necessárias para login (email e senha)
 const LoginScreen = ({navigation}) => {
 
@@ -16,7 +14,6 @@ const LoginScreen = ({navigation}) => {
     const [password, setPassword] = useState('')
 
     // Inicializando a comunicação com o firebase
-    const app = initializeApp(firebaseConfig);
 
     const DB=getFirestore(app, "(default)");
 

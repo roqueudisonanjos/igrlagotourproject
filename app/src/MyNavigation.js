@@ -1,17 +1,16 @@
 
 // Importando os componentes de tela e de funções de navegação.
-import { NavigationContainer } from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
-import MainComponent from './components/MainComponent';
-import EstabelecimentoComponent from './components/EstabelecimentoComponent';
-import Mapa from './components/Mapa';
-import EventosComponent from './components/EventosComponent';
-import CustomNavigationBar from './CustomNavigationBar';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './components/Conta/LoginScreen';
 import RegistrationScreen from './components/Conta/RegistrationScreen';
-import PerfilComponent from './components/PerfilComponent';
+import EstabelecimentoComponent from './components/EstabelecimentoComponent';
+import EventosComponent from './components/EventosComponent';
 import GuiasTuristicosComponent from './components/GuiasTuristicosComponent';
+import MainComponent from './components/MainComponent';
+import Mapa from './components/Mapa';
+import PerfilComponent from './components/PerfilComponent';
 import SugestoesComponent from './components/SugestoesComponent';
+import CustomNavigationBar from './CustomNavigationBar';
 
 // Instância que será usada para definir as rotas do app;
 const Stack=createNativeStackNavigator();
@@ -19,7 +18,6 @@ const Stack=createNativeStackNavigator();
 // Função de navegação do app;
 export default function MyNavigation(){
     return (
-        <NavigationContainer>
             <Stack.Navigator
                 initialRouteName="MainComponent"
                 screenOptions={{
@@ -37,6 +35,5 @@ export default function MyNavigation(){
                 <Stack.Screen name='Sugestoes' options={{headerShown:true, headerTitle: 'Sugestoes'}} component={SugestoesComponent} />
                 <Stack.Screen name='GuiasTuristicos' options={{headerShown:true, headerTitle: 'GuiasTuristicos'}} component={GuiasTuristicosComponent}/>
             </Stack.Navigator>
-        </NavigationContainer>
     )
 }

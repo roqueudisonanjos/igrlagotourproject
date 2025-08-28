@@ -1,13 +1,10 @@
-import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
-import { firebaseConfig } from '../../firebaseConfig';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import app from '@/app/firebaseConfig';
+import { EmailAuthProvider, getAuth, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
 
-export const alterarSenha = async (senhaAtual, novaSenha) => {
+const alterarSenha = async (senhaAtual, novaSenha) => {
 
   try {
 
-    const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
     const user = auth.currentUser;
@@ -35,3 +32,5 @@ export const alterarSenha = async (senhaAtual, novaSenha) => {
     console.error('Erro ao alterar senha:', error.message);
   }
 };
+
+export default alterarSenha;

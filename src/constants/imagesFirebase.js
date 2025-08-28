@@ -1,1 +1,0 @@
-export const imageNewUserDefault = "https://firebasestorage.googleapis.com/v0/b/igr-lago-tour.appspot.com/o/users%2Funnamed.png?alt=media&token=c028f78a-c30d-4b0c-aaa3-ceecf9d27ede";

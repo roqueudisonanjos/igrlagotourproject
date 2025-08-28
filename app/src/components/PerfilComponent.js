@@ -1,23 +1,20 @@
 //classe PerfilComponent
-import { View, Text, TouchableOpacity } from "react-native"
-import { Avatar, ActivityIndicator, Button, Modal, Portal, TextInput } from "react-native-paper"
-import { StyleSheet } from "react-native"
-import * as ImagePicker from 'expo-image-picker';
-import {useEffect, useState} from 'react';
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../firebaseConfig";
+import app from "@/app/firebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from 'expo-image-picker';
 import {
+    getDownloadURL,
     getStorage,
     ref,
     uploadBytesResumable,
-    getDownloadURL,
 } from "firebase/storage";
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Avatar, Button, Modal, Portal, TextInput } from "react-native-paper";
 
-import { doc, getFirestore, updateDoc} from "firebase/firestore"; 
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import { alterarSenha } from '../utils/UpdatePassword';
 
-const app = initializeApp(firebaseConfig);
 const db=getFirestore(app, "(default)");
 const containerStyle = {backgroundColor: 'white', padding: 20};
 
