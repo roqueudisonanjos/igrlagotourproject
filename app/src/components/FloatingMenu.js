@@ -1,11 +1,13 @@
-// FloatingMenu.js
+// Imports das biblioteca react e react-native para componentes funcionais
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+// Bibliotecas de icones
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
+// Componente que recebe os dados de currentScreen e setCurrentScreen
 export default function FloatingMenu({ currentScreen, setCurrentScreen }) {
   return (
+    // Renderização de tela
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.menuItem}
@@ -55,7 +57,7 @@ export default function FloatingMenu({ currentScreen, setCurrentScreen }) {
     </View>
   );
 }
-
+// Estilização de tela
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',

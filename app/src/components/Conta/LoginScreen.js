@@ -1,7 +1,8 @@
-
+// Abaixo as bibliotecas necessárias para criação da tela
+// Bibliotecas do firebase responsável por autenticação e captura de informações
 import app from '@/app/firebaseConfig';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -9,20 +10,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 // criação da tela de login, pegando as informações necessárias para login (email e senha)
 const LoginScreen = ({navigation}) => {
-
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
     // Inicializando a comunicação com o firebase
-
     const DB=getFirestore(app, "(default)");
-
     // Inicializando a autenticação do firebase e obtendo uma autenticação
     const auth = getAuth(app);
-    const providerGoogle = new GoogleAuthProvider();
-
+    //const providerGoogle = new GoogleAuthProvider();
     useEffect(()=>{
-                
         const verificaAT = async()=>{
             const usuarioOnStorage = await AsyncStorage.getItem('user');
             if(usuarioOnStorage!==null){
@@ -31,32 +26,29 @@ const LoginScreen = ({navigation}) => {
         }
         verificaAT();
     },[])
-
     const onFooterLinkPress = () => {
         // Link para tela de criação de conta
         navigation.navigate('Registration')
     }
 
-    // botão de login
+    // Botão de login
     const onLoginPress = () => {
+            // Função de login da biblioteca auth do firebase
             signInWithEmailAndPassword(auth, email, password)
             .then(async (response) => {
+                // Autenticação de usuário
                 const user = response.user
-
+                // Buscando informação no banco de dados
                 const docRef = doc(DB, "users", user.uid);
-
                 try {
-                    // Recupera o documento
+                    // Recupera informações de login do usuário do banco de dados
                     const docSnap = await getDoc(docRef);
-                  
                     if (docSnap.exists()) {
                         // Atribui o conteúdo do documento à variável
                         const usuario = docSnap.data();
-                        
+                        // Salva informações na memória local do dispositivo
                         await AsyncStorage.setItem("user",JSON.stringify(usuario));
-
                         navigation.navigate("MainComponent")
-                
                     } else {
                         console.log("Nenhum documento encontrado!");
                     }

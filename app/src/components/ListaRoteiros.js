@@ -1,22 +1,20 @@
 import React from "react";
-import { FlatList } from "react-native";
-import { StyleSheet } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Card } from "react-native-paper";
-import { View, Text } from "react-native";
-
+// Componente para exibir os cards com a lista de roteiros
 const ListaRoteiros = ({roteiros, clickCard}) =>{
-
     return(
+        // FlatList com informações dos roteiros
         <FlatList
            style={{ marginBottom: 90 }}
             data={roteiros}
             keyExtractor={item => item.index}
             contentContainerStyle={styles.listaEstabelecimentos}
             renderItem={(item)=>{
-
+                // Função que renderiza cada elemento da lista
                 let itemIteravel = item.item;
-
                 return(
+                    // Card com função de clique e estilos atribuidos
                     <Card onPress={() => clickCard(itemIteravel)} mode="outlined" style={styles.estiloCard}>
                         <Card.Cover style={styles.estiloCardCover} source={{ uri: itemIteravel.fotoCapa }} />
                         <View style={styles.cardContent}>

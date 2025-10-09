@@ -1,7 +1,6 @@
-import React from "react";
-import {useState} from "react";
-import { View, FlatList, StyleSheet, useWindowDimensions, Modal, TouchableOpacity, ScrollView } from "react-native";
 import { Image } from '@rneui/themed';
+import React, { useState } from "react";
+import { Modal, ScrollView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
 
 const Imagens = ({ imagens }) => {
     const windowDimensions = useWindowDimensions();
@@ -28,9 +27,8 @@ const Imagens = ({ imagens }) => {
     };
     
     return (
-
+           
         <ScrollView style={{width: windowDimensions.width, flex: 1}}>
-
             {chunkArray(imagens, 3).map((linha, linhaIndex) => (
                 <View key={linhaIndex} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
                     {linha.map((item, index) => (

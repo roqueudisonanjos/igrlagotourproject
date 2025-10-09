@@ -1,8 +1,7 @@
-import React from "react";
-import {useState} from 'react';
-import { View, FlatList, StyleSheet, useWindowDimensions, TouchableOpacity, Modal } from "react-native";
-import VideoPlayer from "./VideoPlayer";
+import React, { useState } from "react";
+import { Modal, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import CapaVideo from "./CapaVideo";
+import VideoPlayer from "./VideoPlayer";
 
 const Videos = ({ videos }) => {
     const windowDimensions = useWindowDimensions();
@@ -22,28 +21,40 @@ const Videos = ({ videos }) => {
 
     // Função auxiliar fora do JSX
     const chunkArray = (array, tamanho) => {
+        if (!array || !Array.isArray(array)) return []; // <- evita erro
         const resultado = [];
         for (let i = 0; i < array.length; i += tamanho) {
-        resultado.push(array.slice(i, i + tamanho));
+            resultado.push(array.slice(i, i + tamanho));
         }
         return resultado;
     };
 
-    return (
-        <View  style={{width: windowDimensions.width    }}>
+    // Se não tiver vídeos, renderiza uma mensagem
+    if (!videos || videos.length === 0) {
+        return (
+            <View style={{ width: windowDimensions.width, alignItems: "center", marginTop: 20 }}>
+                <Text style={{ color: "#666" }}>Nenhum vídeo disponível</Text>
+            </View>
+        );
+    }
 
+    return (
+        <View style={{ width: windowDimensions.width }}>
             {chunkArray(videos, 3).map((linha, linhaIndex) => (
-                <View key={linhaIndex} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                <View
+                    key={`linha-${linhaIndex}`}
+                    style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}
+                >
                     {linha.map((item, index) => (
-                        <View style={styles.imageContainer}>
-                            <TouchableOpacity key={index} onPress={() => handleVideoPress(item)}>
+                        <View key={`video-${linhaIndex}-${index}`} style={styles.imageContainer}>
+                            <TouchableOpacity onPress={() => handleVideoPress(item)}>
                                 <CapaVideo videoURL={item} />
                             </TouchableOpacity>
                         </View>
                     ))}
                 </View>
             ))}
-                
+
             <Modal
                 visible={modalVisible}
                 transparent={true}
@@ -53,40 +64,42 @@ const Videos = ({ videos }) => {
                 <View style={styles.modalBackground}>
                     <TouchableOpacity style={styles.modalCloseArea} onPress={handleCloseModal} />
                     <View style={styles.modalContent}>
-                        {selectedVideo && (
-                            <VideoPlayer videoURL={selectedVideo} />
-                        )}
+                        {selectedVideo && <VideoPlayer videoURL={selectedVideo} />}
                     </View>
                     <TouchableOpacity style={styles.modalCloseArea} onPress={handleCloseModal} />
                 </View>
             </Modal>
-
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     list: {
-        width: '100%',
-        marginLeft: 9/2
+        width: "100%",
+        marginLeft: 9 / 2,
     },
     modalBackground: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 6
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 6,
     },
     modalCloseArea: {
         flex: 1,
-        width: '100%',
-        margin:5
+        width: "100%",
+        margin: 5,
     },
     modalContent: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '90%',
-        height: '90%',
-    }
+        justifyContent: "center",
+        alignItems: "center",
+        width: "90%",
+        height: "90%",
+    },
+    imageContainer: {
+        flex: 1,
+        marginHorizontal: 5,
+    },
 });
+
 export default Videos;

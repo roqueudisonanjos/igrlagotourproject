@@ -1,22 +1,21 @@
 // EventosComponent: tela de detalhes de eventos, com fotos, vídeos, mapa
 
-import { View, Text, useWindowDimensions, Image, Animated, Linking, TouchableOpacity } from "react-native";
-import { Avatar, Button, Icon, Snackbar } from "react-native-paper";
-import { StyleSheet } from "react-native";
-import * as Font from "expo-font";
-import { useEffect, useState, useRef } from "react";
-import { Tab, TabView } from '@rneui/themed';
+import { FontAwesome } from '@expo/vector-icons';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { FontAwesome } from '@expo/vector-icons';
+import { Tab, TabView } from '@rneui/themed';
+import * as Font from "expo-font";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Image, Linking, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { Avatar, Button, Icon, Snackbar } from "react-native-paper";
+import Eventos from "../classes/Eventos";
 import Imagens from "./Imagens";
 import Videos from "./Videos";
-import Eventos from "../classes/Eventos";
 
 const HEADER_MAX_HEIGHT = 200;
 const HEADER_MIN_HEIGHT = 80; // altura mínima, como a da barra de navegação
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-
+// Componente EventosComponent
 const EventosComponent = ({ route, navigation }) => {
   
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -27,16 +26,32 @@ const EventosComponent = ({ route, navigation }) => {
     extrapolate: 'clamp',
   });
   
-  
+  // Controla o índice da aba selecionada (Fotos ou Vídeos) no TabView
   const [index, setIndex] = useState(0);
-
+  // Obtém as dimensões da janela do dispositivo 
   const windowDimensions = useWindowDimensions();
+  // Controla a visibilidade do Snackbar que indica se o evento já terminou
   const [visible, setVisible] = useState(false);
+  // Indica se as fontes personalizadas foram carregadas, evitando renderização antes do carregamento
   const [fontLoaded, setFontLoaded] = useState(false);
-
+  // Recebe o objeto evento enviado pela rota de navegação, contendo todos os dados do evento selecionado
   const { evento } = route.params;
+  // Cria um novo evento
   const newEvento = evento;
-  const eventos = new Eventos(newEvento.id, newEvento.nome, newEvento.localizacao, newEvento.contatos, newEvento.descricao, newEvento.fotos, newEvento.videos, newEvento.entrada, newEvento.tipo, newEvento.nomeDoLocal, newEvento.data, newEvento.imagemCapa);
+  // Instancia a classe Eventos, armazenando todos os atributos do evento
+  const eventos = new Eventos(
+    newEvento.id, 
+    newEvento.nome, 
+    newEvento.localizacao, 
+    newEvento.contatos, 
+    newEvento.descricao, 
+    newEvento.fotos, 
+    newEvento.videos, 
+    newEvento.entrada, 
+    newEvento.tipo, 
+    newEvento.nomeDoLocal, 
+    newEvento.data, 
+    newEvento.imagemCapa);
 
   const abreMapa = (localizacao) => {
     navigation.navigate("Mapa", { localizacao });

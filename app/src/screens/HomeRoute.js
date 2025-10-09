@@ -1,21 +1,18 @@
-//classe HomeRoute
+// Imports responsáveis por componentes basicos, utilizarios, estilos e fontes
+import * as Font from "expo-font";
 import * as React from 'react';
-import { View, Text} from 'react-native';
-import { StyleSheet } from 'react-native';
 import { useEffect } from "react";
-import * as Font from "expo-font"
+import { StyleSheet, Text, View } from 'react-native';
+// Importação das classes Header e SugestoesComponent para alteração de dados de perfil receber sugestoes
 import Header from '../components/Header';
 import SugestoesComponent from '../components/SugestoesComponent';
-
+// Define o componente Home, que possui as funções de navegação da classe Header, mostrando informações de acordo com o local do usuário
 const Home=({navigation, sugestoes, user, nomeColecao, mudaColecao, abrirPerfilMethod, goToLogin, estabelecimentos, localUser})=>{
-
     // Navega para a tela de detalhes de um estabelecimento
     const navegaTela= async (id)=>{
         const local = await estabelecimentos.filter(estabelecimento=>estabelecimento.id === id); 
         navigation.navigate('EstabelecimentoComponent', {local:local}) 
     }
-
-
     // Função para carregar fontes personalizadas
     const fetchFonts = () => {
         return Font.loadAsync({
@@ -24,15 +21,14 @@ const Home=({navigation, sugestoes, user, nomeColecao, mudaColecao, abrirPerfilM
           'CircularSpotifyText-Book': require('../../assets/fonts/CircularSpotifyText-Book.otf'),
         });
     };
-
     useEffect(()=>{
-        fetchFonts(); //Carrega as fontes
-    }, []); //Executa apenas uma vez ao carregar o componente
-    
+    // Carrega as fontes
+        fetchFonts(); 
+    }, []); 
+// Renderização de tela  
     return (
         <View style={styles.container}>
             <Header image={user.imagemPerfil} nomeColecao={nomeColecao} mudaColecao={mudaColecao} abrirPerfilMethod={abrirPerfilMethod} goToLogin={goToLogin}/>
-            
             <View style={{ flex: 1, padding: 20 }}>
                 <View
                     style={{
@@ -42,13 +38,12 @@ const Home=({navigation, sugestoes, user, nomeColecao, mudaColecao, abrirPerfilM
                     }}
                 />
             </View>
-
             <Text style={{textAlign: 'center', fontSize:18, fontWeight: 'bold'}}>Sugestões</Text>
-
             <SugestoesComponent sugestoes={sugestoes} estabelecimentos={estabelecimentos} localUser={localUser} clickCard={navegaTela}/>
         </View>
     );
 }
+// Estilos do componente
 export const styles = StyleSheet.create({
     container: {
         flex: 1,

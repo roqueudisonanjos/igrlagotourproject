@@ -1,17 +1,21 @@
 {
   "expo": {
     "sdkVersion": "53.0.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "jsEngine": "hermes",
     "newArchEnabled": true,
     "name": "igrlagotour",
     "slug": "igr-lago-tour",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/favicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,18 +27,20 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "useNextNotificationsApi": true,
       "permissions": [
         "android.permission.NOTIFICATIONS",
         "android.permission.ACCESS_COARSE_LOCATION",
-        "android.permission.ACCESS_FINE_LOCATION"
-      ]
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.wesleyd25.igrlagotour"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-font",
@@ -47,11 +53,8 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/adaptive-icon.png",
-          "color": "#ffffff",
-          "sounds": [
-            "./local/assets/videoplayback.m4a"
-          ]
+          "icon": "./assets/images/adaptive-icon.png",
+          "color": "#ffffff"
         }
       ],
       [
@@ -65,10 +68,11 @@
       "expo-sqlite"
     ],
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "a346007a-82b1-4f7a-aa52-2e66623816db"
+        "projectId": "48e6a0ed-2dc3-4368-9a65-1781fa4db520"
       }
     },
-    "owner": "wes.d4vid"
+    "owner": "wesleyd25"
   }
 }

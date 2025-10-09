@@ -1,6 +1,6 @@
-import React, {useState } from 'react';
-import { useWindowDimensions, TouchableOpacity} from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import { ResizeMode, Video } from 'expo-av';
+import React, { useState } from 'react';
+import { TouchableOpacity, useWindowDimensions } from 'react-native';
 //Classe para video player dos estabelecimentos
 const VideoPlayer = ({ videoURL }) => {
 
@@ -16,7 +16,6 @@ const VideoPlayer = ({ videoURL }) => {
           video.current.playAsync();
       }
   };
-
   return (
   //View do estabelecimento
     <TouchableOpacity onPress={handleVideoPress}>

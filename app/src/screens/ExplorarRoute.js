@@ -1,36 +1,39 @@
-//classe ExplorarRoute
+// Imports de bibliotecas para componentes funcionais
 import * as React from 'react';
-import { ScrollView, View, useWindowDimensions,Text, TouchableOpacity, TextInput } from 'react-native';
-import { StyleSheet } from 'react-native';
-import { useState, useEffect } from "react";
-import * as Font from "expo-font"
-import Icon from 'react-native-vector-icons/Ionicons';
+import { useEffect, useState } from "react";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+// Bibliotecas de fontes, icones
 import Ionicons from '@expo/vector-icons/Ionicons';
-import ExplorarEstabelecimentos from './itensExplorar/ExplorarEstabelecimentos';
+import * as Font from "expo-font";
+import Icon from 'react-native-vector-icons/Ionicons';
+// Imports de classes de icones e estabelecimentos
 import IconesCategorias from "./IconesCategorias";
+import ExplorarEstabelecimentos from './itensExplorar/ExplorarEstabelecimentos';
 
 // Função para calcular a distância entre dois pontos geográficos (latitude/longitude)
 export function getDistanceBetweenPoints(latitude1, longitude1, latitude2, longitude2, unit = 'miles') {
     let theta = longitude1 - longitude2;
+    // Função matemática para calcular a distância
     let distance = 60 * 1.1515 * (180/Math.PI) * Math.acos(
         Math.sin(latitude1 * (Math.PI/180)) * Math.sin(latitude2 * (Math.PI/180)) + 
         Math.cos(latitude1 * (Math.PI/180)) * Math.cos(latitude2 * (Math.PI/180)) * Math.cos(theta * (Math.PI/180))
     );
-    if (unit == 'miles') {
-        return Math.round(distance, 2); // Retorna a distância em milhas
-    } else if (unit == 'kilometers') {
-        return (distance * 1.609344).toFixed(2); // Retorna a distância em quilômetros
+
+    if (unit === 'miles') {
+        return parseFloat(distance.toFixed(2)); // ✅ Corrigido: retorna em milhas com 2 casas decimais
+    } else if (unit === 'kilometers') {
+        return parseFloat((distance * 1.609344).toFixed(2)); // ✅ Corrigido: retorna em km com 2 casas decimais
     }
 }
 
-const ExplorarRoute=({navigation, estabelecimentos, categorias, localUser})=>{
-
-    useEffect(()=>{
-        let result = estabelecimentos.filter(estabelecimento=>estabelecimento.categoria === categoriaAtiva);
-        console.log('result')
-        console.log(result) 
-        setResultadoPesquisa(result) //querry que contem o que o usuario esta pesquisando
-    },[estabelecimentos])
+// Componente funcional principal da rota "Explorar"
+const ExplorarRoute = ({navigation, estabelecimentos, categorias, localUser}) => {
+    //Variável para armazenar a categoria ativa
+    const [categoriaAtiva, setCategoriaAtiva] = useState(null);
+    //Variavel para a apresentação dos resultados da barra de pesquisa
+    const [searchQuery, setSearchQuery] = React.useState('');
+    //Variavel para armazenar os resultados da pesquisa
+    const [resultadoPesquisa, setResultadoPesquisa] = useState([]); 
 
     // Função para carregar fontes personalizadas
     const fetchFonts = () => {
@@ -48,101 +51,139 @@ const ExplorarRoute=({navigation, estabelecimentos, categorias, localUser})=>{
     const windowDimensions = useWindowDimensions();
     
     // Navega para a tela de detalhes de um estabelecimento
-    const navegaTela= async (id)=>{
+    const navegaTela = async (id) => {
         const local = await estabelecimentos.filter(estabelecimento=>estabelecimento.id === id); 
         navigation.navigate('EstabelecimentoComponent', {local:local}) 
     }
     
-    //Variavel par a apresentação dos resultados da barra de pesquisa
-    const [ searchQuery, setSearchQuery] = React.useState('');
-    //Variavel para armazenar os resultados da pesquisa
-    const [resultadoPesquisa, setResultadoPesquisa] = useState([]); 
+    // useEffect para atualizar a lista de resultados quando a categoria muda
+    useEffect(()=>{
+        if (categoriaAtiva !== null) {
+            // Mostra todos os estabelecimentos da categoria ativa inicialmente
+            const result = estabelecimentos.filter(estabelecimento => estabelecimento.categoria === categoriaAtiva);
+            setResultadoPesquisa(result);
+        } else {
+            setResultadoPesquisa([]);
+        }
+    }, [categoriaAtiva, estabelecimentos]);
 
-    useEffect(()=>{ //use effect para barra de pesquisa
-        if (estabelecimentos !== null && searchQuery.trim() !== ""){
-            let result = estabelecimentos.filter(estabelecimento=>estabelecimento.nome.indexOf(searchQuery)!== -1 || estabelecimento.categoriaNome.indexOf(searchQuery)!== -1 || estabelecimento.descricao.indexOf(searchQuery)!== -1 );
-            setResultadoPesquisa(result) //Atualiza os resultados da pesquisa
-        } 
-    },[searchQuery]) //Executa quando o termo de pesquisa muda
+    // useEffect para barra de pesquisa
+    useEffect(()=>{
+        if (categoriaAtiva !== null) {
+            if (searchQuery.trim() !== "") {
+                // Busca em tempo real apenas pelo nome do estabelecimento dentro da categoria ativa
+                const filtered = estabelecimentos.filter(estabelecimento =>
+                    estabelecimento.categoria === categoriaAtiva &&
+                    estabelecimento.nome.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+                setResultadoPesquisa(filtered); //Atualiza os resultados da pesquisa
+            } else {
+                // ✅ Se a pesquisa for apagada, mostra todos os da categoria ativa
+                const result = estabelecimentos.filter(estabelecimento => estabelecimento.categoria === categoriaAtiva);
+                setResultadoPesquisa(result);
+            }
+        }
+    }, [searchQuery, categoriaAtiva, estabelecimentos]);
 
-    //Variável para armazenar a categoria ativa
-    const [categoriaAtiva, setCategoriaAtiva] = useState(null);
-    
-    const mudaCategoria = (index)=>{
+    const mudaCategoria = (index) => {
         if(index !== null){
             setCategoriaAtiva(index);
-            // Filtra estabelecimentos com base na pesquisa
-            let result = estabelecimentos.filter(estabelecimento=>estabelecimento.categoria === index);
-            console.log('result')
-            console.log(result) 
-            setResultadoPesquisa(result) //querry que contem o que o usuario esta pesquisando
-        }
-        else {
+        } else {
             setCategoriaAtiva(null);
+            setResultadoPesquisa([]); // limpa quando volta para as categorias
         }
+        setSearchQuery(''); // ✅ limpa pesquisa ao trocar de categoria
     }
 
     const renderComponent = () => {
         if (categoriaAtiva !== null) {
+            // Renderização de tela
             return (
-                <View>
+                <SafeAreaView style={{ flex: 1 }}>
                     <TouchableOpacity style={styles.buttonBack} onPress={() => mudaCategoria(null)}>
                         <Icon name="arrow-back" size={20} color="#fff" style={styles.icon} />
                         <Text style={styles.buttonBackText}>Voltar</Text>
                     </TouchableOpacity>
-                    <ExplorarEstabelecimentos 
-                        estabelecimentos={resultadoPesquisa} 
-                        localUser={localUser} 
-                        clickCard={navegaTela} 
-                        getDistanceBetweenPoints={getDistanceBetweenPoints} 
-                    />
-                </View>
+
+                    {/* A barra de pesquisa só aparece quando uma categoria é selecionada */}
+                    <View style={styles.searchContainer}>
+                        <Ionicons name="search" size={25} color="#555" />
+                        <TextInput
+                            style={styles.searchInput}
+                            placeholder="Está procurando algo?"
+                            value={searchQuery}
+                            onChangeText={setSearchQuery}
+                            placeholderTextColor="#aaa"
+                        />
+                        <Ionicons name="options" size={28} color="#555" />
+                    </View>
+
+                    <ScrollView
+                        style={{ flex: 1 }}
+                        contentContainerStyle={{
+                            paddingBottom: 120, // <-- Reservado espaço extra para o FloatingMenu
+                        }}
+                        showsVerticalScrollIndicator={false}
+                    >
+                        <ExplorarEstabelecimentos 
+                            estabelecimentos={resultadoPesquisa} 
+                            localUser={localUser} 
+                            clickCard={navegaTela} 
+                            getDistanceBetweenPoints={getDistanceBetweenPoints} 
+                        />
+                    </ScrollView>
+                </SafeAreaView>
             )
-        }else{
-            return(renderCategorias());
+        } else {
+            return (renderCategorias());
         }
     };
 
     const renderCategorias = () => {
         return (
-            <ScrollView>
-                {categorias.map((item, index) => (
-                    <TouchableOpacity key={index} onPress={() => mudaCategoria(index)} style={[styles.textoCategoria, index===categorias.length-1 && {marginBottom:40}]}>
-                        <IconesCategorias index={index}/>
-                        <Text style={styles.categoriaText}>{item}</Text>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
+            <SafeAreaView style={{ flex: 1 }}>
+                {/* 🔹 O título agora está fixo fora da ScrollView, não rola junto */}
+                <Text style={styles.tituloCategorias}>Categorias de Lugares</Text>
+
+                {/* 🔹 A ScrollView agora ocupa todo o espaço e elimina o espaço vazio */}
+                <ScrollView 
+                    style={{ flex: 1 }}
+                    contentContainerStyle={{ 
+                        paddingBottom: 120, // <-- reservado espaço extra para o FloatingMenu (corrige o problema)
+                        flexGrow: 1 
+                    }}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {categorias.map((item, index) => (
+                        <TouchableOpacity 
+                            key={index} 
+                            onPress={() => mudaCategoria(index)} 
+                            style={[styles.textoCategoria, index===categorias.length-1 && {marginBottom:40}]}
+                        >
+                            <IconesCategorias index={index}/>
+                            <Text style={styles.categoriaText}>{item}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+            </SafeAreaView>
         );
     };
     
     return (
         <View style={styles.container}>
-    
-            {/* Barra de Pesquisa */}
-            <View style={styles.searchContainer}>
-                <Ionicons name="search" size={25} color="#555" />
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Está procurando algo?"
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                    placeholderTextColor="#aaa"
-                />
-                <Ionicons name="options" size={28} color="#555" />
-            </View>
-    
-            {/* Conteúdo dinâmico */}
-            <View style={{ width: windowDimensions.width, height: '80%' }}>
+            {/* A pesquisa é exibida apenas dentro de renderComponent quando categoriaAtiva !== null */}
+            <View style={{ width: windowDimensions.width, height: '90.8%' }}>
                 {renderComponent()}
             </View>
         </View>
     );
 }
+
+// Folha de estilos utilizadas
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E6F5E6', // Fundo verde claro
+        backgroundColor: '#E6F5E6', 
     },
     searchContainer: {
         flexDirection: 'row',
@@ -193,9 +234,9 @@ export const styles = StyleSheet.create({
         marginVertical: 10,
     },
     chipExplorar: {
-        backgroundColor: "#66CDAA", // Verde claro suave
+        backgroundColor: "#66CDAA", 
         borderRadius: 25,
-        paddingVertical: 15, // Aumentado o tamanho dos botões
+        paddingVertical: 15,
         paddingHorizontal: 15,
         marginHorizontal: 5,
         flexDirection: 'row',
@@ -208,14 +249,14 @@ export const styles = StyleSheet.create({
     },
     chipText: {
         color: '#000000',
-        fontSize: 15, // Aumentado o tamanho da fonte
+        fontSize: 15, 
         fontWeight: 'bold',
         textAlign: 'center',
     },
     textoCategoria: {
         width: '80%',
         paddingHorizontal: 40,
-        paddingVertical: 19, // Aumentado o tamanho dos botões
+        paddingVertical: 19, 
         margin: 8,
         alignItems: 'center',
         alignSelf: 'center',
@@ -232,7 +273,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'row', 
     },
     categoriaText: {
-        fontSize: 18, // Aumentado o tamanho da fonte
+        fontSize: 18, 
         color: '#333',
         marginLeft: 10,
     },
@@ -265,6 +306,14 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 5,
         elevation: 4,
+    },
+    tituloCategorias: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#333',
+        textAlign: 'center',
+        marginTop: 20,
+        marginBottom: 10,
     },
 });
 export default ExplorarRoute;

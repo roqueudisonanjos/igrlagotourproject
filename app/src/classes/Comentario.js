@@ -1,5 +1,5 @@
 class Comentario{
-    //construtor que inicializa as variaveis dos comentarios
+    // Construtor que inicializa as variaveis dos comentarios
     //https://excalidraw.com/#room=02a25c89f98c540d891a,mNg35PAMISYuY27CORTnxw
 
     constructor(nome, texto, data){
@@ -26,4 +26,6 @@ class Comentario{
         return this.texto;
     }     
 }
+// Futuramente criar um comentário dentro de users, em storage no banco de dados, para facilitar a inserção de comentários
+
 export default Comentario;

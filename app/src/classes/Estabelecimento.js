@@ -1,7 +1,7 @@
 import Comentario from "./Comentario";
 class Estabelecimento{
 //Classe estabelecimento, contendo o construtor com os itens que serão chamados na classe EstabelecimentoComponent    
-    constructor(nome, localizacao, descricao, fotos, videos, comentarios, avaliacao, categoria, imagemCapa, userInstagram, whatsapp){
+    constructor(nome, localizacao, descricao, fotos, videos, comentarios, avaliacao, categoria, imagemCapa, userInstagram, whatsapp, id){
         this.nome=nome;
         this.localizacao=localizacao;
         this.descricao=descricao;
@@ -11,6 +11,7 @@ class Estabelecimento{
         this.comentarios=[];
         this.userInstagram=userInstagram;
         this.whatsapp=whatsapp;
+        this.id=id;
         
         for(const item in comentarios){
             this.comentarios.push(new Comentario(comentarios[item][0], comentarios[item][1], comentarios[item][2]));

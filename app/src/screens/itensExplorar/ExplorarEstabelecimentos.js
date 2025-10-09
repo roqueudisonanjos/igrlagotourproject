@@ -1,37 +1,47 @@
+// Importações de componentes e cards
 import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Card } from "react-native-paper";
-import { StyleSheet } from 'react-native';
 
+// Componente que recebe a lista de estabelecimentos, posição do usuário, função de distância e clique no card
 const ExplorarEstabelecimentos = ({ estabelecimentos, localUser, getDistanceBetweenPoints, clickCard }) => {
-
     return (
         <>
-        {estabelecimentos!==null && estabelecimentos!==undefined && estabelecimentos.length>0 ? (
-            <FlatList
-                style={{ marginBottom: 90 }}
-                data={estabelecimentos}
-                renderItem={({ item }) => (
-                    <Card onPress={() => clickCard(item.id)} mode="outlined" style={styles.estiloCard}>
-                        {/* Verifique se fotos existem antes de tentar acessá-las */}
-                        {item.fotos && item.fotos.length > 0 && (
-                            <Card.Cover style={styles.estiloCardCover} source={{ uri: item.fotos[0] }} />
-                        )}
-                        <View style={styles.cardContent}>
-                            <Text style={styles.estiloTitulo}>{item.nome}</Text>
-                            <Text style={styles.estiloDescricao}>{item.descricao}</Text>
-                            <Text style={styles.estiloDistancia}>
-                                A {getDistanceBetweenPoints(localUser.latitude, localUser.longitude, item.localizacao.latitude, item.localizacao.longitude, "kilometers")} KM de você
-                            </Text>
-                        </View>
-                    </Card>
-                )}
-                keyExtractor={item => item.id.toString()}
-                contentContainerStyle={styles.listaEstabelecimentos}
-            />
-        ) : (
-            <Text>Sem estabelecimentos</Text>
-        )}
+            {/* Se houver estabelecimentos mostra a lista senão mostra mensagem*/}
+            {estabelecimentos !== null && estabelecimentos !== undefined && estabelecimentos.length > 0 ? (
+                <View style={styles.listaEstabelecimentos}>
+                    {estabelecimentos.map((item) => (
+                        // Ao clicar chama a função
+                        <Card 
+                            key={item.id.toString()} 
+                            onPress={() => clickCard(item.id)} 
+                            mode="outlined" 
+                            style={styles.estiloCard} 
+                        >
+                            {/* Verifique se fotos existem antes de tentar acessá-las */}
+                            {item.fotos && item.fotos.length > 0 && (
+                                <Card.Cover style={styles.estiloCardCover} source={{ uri: item.fotos[0] }} />
+                            )}
+                            <View style={styles.cardContent}>
+                                {/* Textos dos cards e informações de distância*/}
+                                <Text style={styles.estiloTitulo}>{item.nome}</Text>
+                                <Text style={styles.estiloDescricao}>{item.descricao}</Text>
+                                <Text style={styles.estiloDistancia}>
+                                    A {getDistanceBetweenPoints(
+                                        localUser.latitude, 
+                                        localUser.longitude, 
+                                        item.localizacao.latitude, 
+                                        item.localizacao.longitude, 
+                                        "kilometers"
+                                    )} KM de você
+                                </Text>
+                            </View>
+                        </Card>
+                    ))}
+                </View>
+            ) : (
+                <Text>Não foram encontrados resultados.</Text>
+            )}
         </>
     );
 };

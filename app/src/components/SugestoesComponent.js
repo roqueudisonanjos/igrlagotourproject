@@ -2,28 +2,25 @@ import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { getDistanceBetweenPoints } from '../screens/ExplorarRoute';
-
+// Criando componente SugestoesComponent que recebe 4 propriedades
 const SugestoesComponent = ({sugestoes, estabelecimentos, localUser, clickCard}) => {
-
+  // Monta a lista final de objetos de estabelecimentos sugeridos
   const buildObjectsSugestoes = (arraySugestoes) =>{
-    
+    // Cria uma lista vazia para armazenar apenas os estabelecimentos sugeridos
     const estabelecimentosLista = [];
-    
     // Percorre cada campo (cada estabelecimento)
     Object.entries(estabelecimentos).forEach(([nomeCampo, valorCampo]) => {
-
-      if (sugestoes.includes(parseInt(valorCampo.id))) {
+      // Verifica se o ID do estabelecimento está na lista de sugestões.
+      if (sugestoes.includes((valorCampo.id))) {
         estabelecimentosLista.push({ nomeCampo, ...valorCampo });
       }
     });
-
+    // Retorna lista de estabelecimentos
     return estabelecimentosLista;
   }
-  
   useEffect(()=>{
     console.log("sugestoes abaixo")
     console.log(sugestoes)
-
   }, [])
 
   return (
@@ -32,12 +29,9 @@ const SugestoesComponent = ({sugestoes, estabelecimentos, localUser, clickCard})
       data={sugestoes!==null && sugestoes!==undefined ? buildObjectsSugestoes(sugestoes): null}
       keyExtractor={(_, index)=> index}
       renderItem={(i)=>{
-
         const item = i.item;
-
         console.log("C=SugestoesComponent item=")
         console.log(item);
-
         return(
           <Card onPress={()=>clickCard(item.id)} mode="outlined" style={styles.estiloCard}>
               {/* Verifique se fotos existem antes de tentar acessá-las */}
@@ -49,7 +43,7 @@ const SugestoesComponent = ({sugestoes, estabelecimentos, localUser, clickCard})
                   <Text style={styles.estiloDescricao}>{item.descricao}</Text>
                   {localUser!==undefined && localUser!==null && item.localizacao !==undefined && item.localizacao !==null ?
                     <Text style={styles.estiloDistancia}>
-                        A {getDistanceBetweenPoints(localUser.latitude, localUser.longitude, item.localizacao.latitude, item.localizacao.longitude, "kilometers")} KM de você
+                        A  {getDistanceBetweenPoints(localUser.latitude, localUser.longitude, item.localizacao.latitude, item.localizacao.longitude, "kilometers")} KM de você
                     </Text>
                     : null
                   }

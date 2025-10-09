@@ -21,24 +21,22 @@ import Videos from "./Videos";
 
 // Componente principal que renderiza os detalhes do estabelecimento selecionado
 const EstabelecimentoComponent = ({ route }) => {
+    console.log(route)
     const windowDimensions = useWindowDimensions();
-
+    // Configura o título da tela com o nome do estabelecimento
     const navigation = useNavigation();
     useLayoutEffect(() => {
         navigation.setOptions({
           headerTitle: estabelecimento.nome,
         });
       }, [navigation]);
-
     // Inicializa o Firebase e conecta com o banco de dados Firestore
-
     const db = getFirestore(app, "(default)");
-
     // Estados para controle do modal de avaliação
     const [modalAvaliacaoVisible, setModalAvaliacaoVisible] = useState(false);
     const abreAvaliacao = () => setModalAvaliacaoVisible(true);
     const hideModal = () => setModalAvaliacaoVisible(false);
-
+    // Estilos do modal
     const containerStyle = {
         backgroundColor: "#fff",
         padding: 20,
@@ -46,12 +44,10 @@ const EstabelecimentoComponent = ({ route }) => {
         justifyContent: "center",
         borderRadius: 12,
     };
-
     // Função para redirecionar o usuário para a tela de mapa
     const abreMapa = (localizacao) => {
         navigation.navigate("Mapa", { localizacao: localizacao });
     }
-
     // Estados para fontes, aba ativa, avaliação, usuário e cidade
     const [fontesCarregadas, setFontesCarregadas] = useState(false);
     const [abaIndex, setAbaIndex] = useState(0);
@@ -59,7 +55,6 @@ const EstabelecimentoComponent = ({ route }) => {
     const [usuario, setUsuario] = useState({});
     const [cidade, setCidade] = useState("");
     const [espacoDisponivelTabViews, setEspacoDisponivelTabViews] = useState(0);
-
     // Carrega fontes personalizadas utilizadas no app
     const carregarFontes = () => {
         return Font.loadAsync({
@@ -86,10 +81,9 @@ const EstabelecimentoComponent = ({ route }) => {
         }
         carregarConfiguracoes();
     }, []);
-
+     // Recebe dados do estabelecimento pela rota
     const { local } = route.params;
     const newLocal = local[0];
-
     console.log("C=EstabelecimentoComponent userInstagram=" + newLocal.userInstagram)
     console.log("C=EstabelecimentoComponent whatsapp=" + newLocal.whatsapp)
 
@@ -105,7 +99,8 @@ const EstabelecimentoComponent = ({ route }) => {
         newLocal.categoria,
         newLocal.imagemCapa,
         newLocal.userInstagram,
-        newLocal.whatsapp
+        newLocal.whatsapp,
+        newLocal.id
     );
 
     // Atualiza avaliações no Firestore quando o valor da nota muda
@@ -163,7 +158,36 @@ const EstabelecimentoComponent = ({ route }) => {
             alert('Este estabelecimento não tem whatsapp!');
         }
     };
+    // Função para adicionar comentários sequenciais ao estabelecimento no Firestore
+    async function adicionarComentarioSequencial(texto) {
+        const ref = doc(db, "Estabelecimentos", estabelecimento.id);
+        const snap = await getDoc(ref);
+        
+        try{
+            const usuario = await AsyncStorage.getItem("user");
+            console.log("C=PerfilComponent m=pegaUser usuario="+usuario);
+            if(usuario!==null) {
+               let usuarioJson = JSON.parse(usuario);
+               if (!snap.exists()) return;
 
+                const data = snap.data();
+                const comentarios = data?.comentarios || {};
+                // Pega próximo índice do comentário
+                const novoIndice = Object.keys(comentarios).length; // último número + 1
+                const timestamp = Date.now();
+
+                await updateDoc(ref, {
+                    [`comentarios.${novoIndice}`]: [usuarioJson.nome, texto, timestamp]
+                });
+            }
+        }
+        catch(e){
+            console.error(e);
+        }  
+    
+
+        
+    }
     return (
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
             {/* Modal de avaliação */}
@@ -184,9 +208,11 @@ const EstabelecimentoComponent = ({ route }) => {
             {/* Cabeçalho do estabelecimento */}
             <View style={styles.informacoesEstabelecimento}>
                 <View>
+                    {/* Imagem de perfil/capa do estabelecimento */} 
                     <Avatar.Image size={120} style={styles.imagem} source={{ uri: estabelecimento.imagemCapa }} />
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
                         <TouchableOpacity onPress={() => abrirWhatsApp(estabelecimento.whatsapp)}>
+                            {/* Botões de contato: WhatsApp e Instagram */} 
                             <FontAwesome5 name="whatsapp" size={30} color="#3EA201" />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => abrirInstagram(estabelecimento.userInstagram)}>
@@ -194,16 +220,16 @@ const EstabelecimentoComponent = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-
+                {/* Informações de nome, avaliação e botões principais */} 
                 <View style={styles.containerText}>
                     <Text style={styles.tituloLugar}>{estabelecimento.getNome()}</Text>
-
+                    {/* Exibe a nota média e quantidade de avaliações */}
                     <View style={styles.avaliacaoContainer}>
                         <Text style={styles.nota}>{estabelecimento.avaliacao?.length > 0 ? estabelecimento.getAvaliacao() : 0.0}</Text>
                         <FontAwesome name="star" size={20} color="#FFD700" style={{ marginHorizontal: 4 }} />
                         <Text style={styles.totalAvaliacoes}>{newLocal.avaliacao.length} avaliações</Text>
                     </View>
-
+                    {/* Botões para abrir modal de avaliação e mapa */}
                     <View style={styles.botoesContainer}>
                         <TouchableOpacity style={styles.botaoPersonalizado} onPress={abreAvaliacao}>
                             <Text style={styles.textoBotao}>Avaliar</Text>
@@ -216,7 +242,6 @@ const EstabelecimentoComponent = ({ route }) => {
             </View>
 
             <Text style={styles.textoBio}>{estabelecimento.getDescricao()}</Text>
-
             {/* Abas de conteúdo */}
             <Tab
                 value={abaIndex}
@@ -238,7 +263,7 @@ const EstabelecimentoComponent = ({ route }) => {
                     <Videos style={{ width: '100%', flex: 1, margin:5 }} videos={estabelecimento.getVideos()} />
                 </TabView.Item>
                 <TabView.Item style={{ width: '100%', flex: 1 }}>
-                    <Comentarios comentarios={estabelecimento.getComentarios()} />
+                    <Comentarios comentarios={estabelecimento.getComentarios()} metodoEnviarComentario={adicionarComentarioSequencial} />
                 </TabView.Item>
             </TabView>
         </View>

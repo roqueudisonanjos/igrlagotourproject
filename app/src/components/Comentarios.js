@@ -1,23 +1,25 @@
-import React from "react";
-import { useState } from "react";
-import { View, FlatList, StyleSheet, Text, useWindowDimensions, TouchableOpacity } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { TextInput, Button, Modal, Portal} from 'react-native-paper';
+import React, { useState } from "react";
+import { FlatList, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { Button, Modal, Portal, TextInput } from 'react-native-paper';
 
-// variável responsável pelos comentários
-const Comentarios = ({ comentarios }) => {
+// Componente responsável por exibir e enviar comentários
+const Comentarios = ({ comentarios, metodoEnviarComentario }) => {
+    // Dimensões de tela
     const windowDimensions = useWindowDimensions();
-    // retornando os comentários e definindo as dimensões dos comentários 
+    // Armazena o texto digitado pelo usuário no campo de comentário
     const [text, setText] = React.useState("");
-
+    // Controla exibição do modal com um estado boleano
     const [visible, setVisible] = useState(false);
-
+    // Função para fechar o modal
     const hideModal = () => {
         setVisible(false);
     }
-
+    //Função que envia o comentário digitado e fecha o modal
     const enviarComentario = () =>{
         hideModal();
+        metodoEnviarComentario(text)
+        // Chama o método recebido envia o texto digitado
     }
 
     const containerStyle = {backgroundColor: 'white', padding: 20};
@@ -61,6 +63,7 @@ const Comentarios = ({ comentarios }) => {
         </View>
     );
 }
+ 
 
 const styles = StyleSheet.create({
     viewComentario: {
