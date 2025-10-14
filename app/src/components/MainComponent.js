@@ -26,6 +26,22 @@ const MainComponent = ({navigation}) => {
     navigation.navigate("Login");
     console.log("C=MainComponent M=goToLogin m=Voltando para tela de Login")
   }
+
+  const atualizarEstabelecimento = async()=>{
+    const cidade = await AsyncStorage.getItem("nomeColecao");
+    const ref = doc(DB, cidade, "Estabelecimentos");
+    const snap = await getDoc(ref);
+    const campos = snap.data();
+    const estabelecimentosBanco = []
+    for (const campo in campos){ // Percorrendo todos os campos e inserindo no array de estabelecimentos
+      // Passando um push para o estabelecimento, pegando o id do banco de dados
+      estabelecimentosBanco.push({id:campo, ...campos[campo]});  
+      console.log("C=MainCOmponent Teste Atualização", campos[campo])
+    }
+    setEstabelecimentos(campos);
+    console.debug("C=MainCOmponent Teste Atualização", typeof(campos));
+  }
+
   // Controla a tela ativa, sendo atualizado de forma dinamica
   const [currentScreen, setCurrentScreen] = useState('Explorar'); 
   // Função para renderizar a tela com base no estado atual, podendo alternar entre as telas
@@ -48,6 +64,7 @@ const MainComponent = ({navigation}) => {
       case 'Explorar':
         return (
           <ExplorarRoute
+            atualizarEstabelecimento={atualizarEstabelecimento}
             categorias={categorias}
             estabelecimentos={estabelecimentos}
             localUser={localUser}

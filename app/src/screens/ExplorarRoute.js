@@ -27,7 +27,7 @@ export function getDistanceBetweenPoints(latitude1, longitude1, latitude2, longi
 }
 
 // Componente funcional principal da rota "Explorar"
-const ExplorarRoute = ({navigation, estabelecimentos, categorias, localUser}) => {
+const ExplorarRoute = ({atualizarEstabelecimento, navigation, estabelecimentos, categorias, localUser}) => {
     //Variável para armazenar a categoria ativa
     const [categoriaAtiva, setCategoriaAtiva] = useState(null);
     //Variavel para a apresentação dos resultados da barra de pesquisa
@@ -52,13 +52,16 @@ const ExplorarRoute = ({navigation, estabelecimentos, categorias, localUser}) =>
     
     // Navega para a tela de detalhes de um estabelecimento
     const navegaTela = async (id) => {
-        const local = await estabelecimentos.filter(estabelecimento=>estabelecimento.id === id); 
-        navigation.navigate('EstabelecimentoComponent', {local:local}) 
+        if (categoriaAtiva !== null && (estabelecimentos !== null && estabelecimentos !== undefined)){
+            await atualizarEstabelecimento();
+            const local = await estabelecimentos.filter (estabelecimento=>estabelecimento.id === id); 
+            navigation.navigate('EstabelecimentoComponent', {local:local}) 
+        }
     }
     
     // useEffect para atualizar a lista de resultados quando a categoria muda
     useEffect(()=>{
-        if (categoriaAtiva !== null) {
+        if (categoriaAtiva !== null && (estabelecimentos !== null && estabelecimentos !== undefined)) {
             // Mostra todos os estabelecimentos da categoria ativa inicialmente
             const result = estabelecimentos.filter(estabelecimento => estabelecimento.categoria === categoriaAtiva);
             setResultadoPesquisa(result);
@@ -69,7 +72,7 @@ const ExplorarRoute = ({navigation, estabelecimentos, categorias, localUser}) =>
 
     // useEffect para barra de pesquisa
     useEffect(()=>{
-        if (categoriaAtiva !== null) {
+        if (categoriaAtiva !== null && (estabelecimentos !== null && estabelecimentos !== undefined)) {
             if (searchQuery.trim() !== "") {
                 // Busca em tempo real apenas pelo nome do estabelecimento dentro da categoria ativa
                 const filtered = estabelecimentos.filter(estabelecimento =>

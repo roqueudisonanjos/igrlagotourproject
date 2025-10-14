@@ -158,36 +158,7 @@ const EstabelecimentoComponent = ({ route }) => {
             alert('Este estabelecimento não tem whatsapp!');
         }
     };
-    // Função para adicionar comentários sequenciais ao estabelecimento no Firestore
-    async function adicionarComentarioSequencial(texto) {
-        const ref = doc(db, "Estabelecimentos", estabelecimento.id);
-        const snap = await getDoc(ref);
-        
-        try{
-            const usuario = await AsyncStorage.getItem("user");
-            console.log("C=PerfilComponent m=pegaUser usuario="+usuario);
-            if(usuario!==null) {
-               let usuarioJson = JSON.parse(usuario);
-               if (!snap.exists()) return;
-
-                const data = snap.data();
-                const comentarios = data?.comentarios || {};
-                // Pega próximo índice do comentário
-                const novoIndice = Object.keys(comentarios).length; // último número + 1
-                const timestamp = Date.now();
-
-                await updateDoc(ref, {
-                    [`comentarios.${novoIndice}`]: [usuarioJson.nome, texto, timestamp]
-                });
-            }
-        }
-        catch(e){
-            console.error(e);
-        }  
     
-
-        
-    }
     return (
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
             {/* Modal de avaliação */}
@@ -263,7 +234,7 @@ const EstabelecimentoComponent = ({ route }) => {
                     <Videos style={{ width: '100%', flex: 1, margin:5 }} videos={estabelecimento.getVideos()} />
                 </TabView.Item>
                 <TabView.Item style={{ width: '100%', flex: 1 }}>
-                    <Comentarios comentarios={estabelecimento.getComentarios()} metodoEnviarComentario={adicionarComentarioSequencial} />
+                    <Comentarios comentarios={estabelecimento.getComentarios()} idEstabelecimento={estabelecimento.id} />
                 </TabView.Item>
             </TabView>
         </View>

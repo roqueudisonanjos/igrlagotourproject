@@ -17,9 +17,6 @@ class Comentario{
         const data = new Date(segundos*1000 + nanoSegundos/1000000);
         const dataFormatada = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth()+1).toString().padStart(2, '0')}/${data.getFullYear()}  ${data.getHours().toString().padStart(2, '0')}:${data.getMinutes().toString().padStart(2, '0')}`
 
-        console.log("C=Comentario M=getDataFormatada typeOfDataFormatada="+typeof(dataFormatada));
-        console.log(dataFormatada);
-
         return dataFormatada;
     }
     getTexto(){

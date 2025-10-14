@@ -1,10 +1,21 @@
 // Importações de componentes e cards
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from "react-native-paper";
 
 // Componente que recebe a lista de estabelecimentos, posição do usuário, função de distância e clique no card
 const ExplorarEstabelecimentos = ({ estabelecimentos, localUser, getDistanceBetweenPoints, clickCard }) => {
+    const [show, setShow] = useState(false);
+    useEffect(()=> {
+        if(estabelecimentos !== null && estabelecimentos !== undefined){
+            setShow(true);
+        }
+    })
+    
+    if (!show ){
+        return null;
+    }
+
     return (
         <>
             {/* Se houver estabelecimentos mostra a lista senão mostra mensagem*/}

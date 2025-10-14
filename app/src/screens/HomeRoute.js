@@ -9,10 +9,14 @@ import SugestoesComponent from '../components/SugestoesComponent';
 // Define o componente Home, que possui as funções de navegação da classe Header, mostrando informações de acordo com o local do usuário
 const Home=({navigation, sugestoes, user, nomeColecao, mudaColecao, abrirPerfilMethod, goToLogin, estabelecimentos, localUser})=>{
     // Navega para a tela de detalhes de um estabelecimento
+    
     const navegaTela= async (id)=>{
-        const local = await estabelecimentos.filter(estabelecimento=>estabelecimento.id === id); 
-        navigation.navigate('EstabelecimentoComponent', {local:local}) 
+        if (estabelecimentos !== null && estabelecimentos !== undefined){
+            const local = await estabelecimentos.filter(estabelecimento=>estabelecimento.id === id); 
+            navigation.navigate('EstabelecimentoComponent', {local:local}) 
+        }
     }
+
     // Função para carregar fontes personalizadas
     const fetchFonts = () => {
         return Font.loadAsync({
