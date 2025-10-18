@@ -42,7 +42,11 @@ const Home=({navigation, sugestoes, user, nomeColecao, mudaColecao, abrirPerfilM
                     }}
                 />
             </View>
-            <Text style={{textAlign: 'center', fontSize:18, fontWeight: 'bold'}}>Sugestões</Text>
+            {nomeColecao !== null && nomeColecao !== undefined ?
+                <Text style={{textAlign: 'center', fontSize:18, fontWeight: 'bold'}}>Sugestões</Text>
+            :          
+                <Text style={{textAlign: 'center', fontSize:18, margin: 5, fontWeight: 'heavy'}}>Para iniciar, escolha uma cidade no canto superior direito.</Text>
+            }
             <SugestoesComponent sugestoes={sugestoes} estabelecimentos={estabelecimentos} localUser={localUser} clickCard={navegaTela}/>
         </View>
     );

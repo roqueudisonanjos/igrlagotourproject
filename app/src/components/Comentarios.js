@@ -8,7 +8,7 @@ import { Button, Modal, Portal, TextInput } from 'react-native-paper';
 
 
 // Componente responsável por exibir e enviar comentários
-const Comentarios = ({ comentarios, idEstabelecimento }) => {
+const Comentarios = ({ comentarios, idEstabelecimento, updateComentarios }) => {
     // Dimensões de tela
     const windowDimensions = useWindowDimensions();
     // Armazena o texto digitado pelo usuário no campo de comentário
@@ -22,7 +22,8 @@ const Comentarios = ({ comentarios, idEstabelecimento }) => {
     //Função que envia o comentário digitado e fecha o modal
     const enviarComentario = () =>{
         hideModal();
-        adicionarComentarioSequencial(text)
+        adicionarComentarioSequencial(text);
+        //updateComentarios(text, nome, Timestamp.now);
         setText('')
         // Chama o método recebido envia o texto digitado
     }
@@ -50,6 +51,7 @@ const Comentarios = ({ comentarios, idEstabelecimento }) => {
                 const date = Date.now();
 
                 const timestamp = Timestamp.now();
+                updateComentarios(texto, usuarioJson.nome, timestamp, date);
                 console.debug("A= Comentarios novo indice: ", date);
                 console.log("comentario efetuado")
                 await updateDoc(ref, {

@@ -27,7 +27,7 @@ export function getDistanceBetweenPoints(latitude1, longitude1, latitude2, longi
 }
 
 // Componente funcional principal da rota "Explorar"
-const ExplorarRoute = ({atualizarEstabelecimento, navigation, estabelecimentos, categorias, localUser}) => {
+const ExplorarRoute = ({ navigation, estabelecimentos, categorias, localUser}) => {
     //Variável para armazenar a categoria ativa
     const [categoriaAtiva, setCategoriaAtiva] = useState(null);
     //Variavel para a apresentação dos resultados da barra de pesquisa
@@ -53,7 +53,6 @@ const ExplorarRoute = ({atualizarEstabelecimento, navigation, estabelecimentos, 
     // Navega para a tela de detalhes de um estabelecimento
     const navegaTela = async (id) => {
         if (categoriaAtiva !== null && (estabelecimentos !== null && estabelecimentos !== undefined)){
-            await atualizarEstabelecimento();
             const local = await estabelecimentos.filter (estabelecimento=>estabelecimento.id === id); 
             navigation.navigate('EstabelecimentoComponent', {local:local}) 
         }

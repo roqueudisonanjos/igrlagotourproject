@@ -27,6 +27,7 @@ const MainComponent = ({navigation}) => {
     console.log("C=MainComponent M=goToLogin m=Voltando para tela de Login")
   }
 
+  /*
   const atualizarEstabelecimento = async()=>{
     const cidade = await AsyncStorage.getItem("nomeColecao");
     const ref = doc(DB, cidade, "Estabelecimentos");
@@ -40,10 +41,10 @@ const MainComponent = ({navigation}) => {
     }
     setEstabelecimentos(campos);
     console.debug("C=MainCOmponent Teste Atualização", typeof(campos));
-  }
+  } */
 
   // Controla a tela ativa, sendo atualizado de forma dinamica
-  const [currentScreen, setCurrentScreen] = useState('Explorar'); 
+  const [currentScreen, setCurrentScreen] = useState('Home'); 
   // Função para renderizar a tela com base no estado atual, podendo alternar entre as telas
   const renderScreen = () => {
     switch (currentScreen) {
@@ -64,7 +65,6 @@ const MainComponent = ({navigation}) => {
       case 'Explorar':
         return (
           <ExplorarRoute
-            atualizarEstabelecimento={atualizarEstabelecimento}
             categorias={categorias}
             estabelecimentos={estabelecimentos}
             localUser={localUser}
@@ -223,6 +223,18 @@ const MainComponent = ({navigation}) => {
     setNomeColecao(nomeColecaoCache);
   }
 
+  useFocusEffect(
+    React.useCallback(() =>{
+      if(nomeColecao!=="" && nomeColecao!=null) {
+        loadAllItemsFromCollectionOfMyCity();
+      }
+      else{
+        getNomeColecaoFromStorage();
+      }
+    }, [nomeColecao])
+  )
+
+
   useEffect(()=>{
     console.log("cidade escolhida")
     console.log(nomeColecao)
@@ -233,6 +245,7 @@ const MainComponent = ({navigation}) => {
       getNomeColecaoFromStorage();
     }
   },[nomeColecao])
+
   // Estado para armazenar coordenadas do usuário
   const [localUser, setLocalUser] = useState({latitude:0, longitude:0}); 
   //useEffect que seta a localização do usuário dizendo em que municipio ele esta, isso é importante para a comunicação com o banco de dados

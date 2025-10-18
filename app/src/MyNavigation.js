@@ -18,7 +18,7 @@ export default function MyNavigation(){
     return (
             <Stack.Navigator
 // Definindo tela inicial de navegação
-                initialRouteName="MainComponent"
+                initialRouteName="Login"
                 screenOptions={{
 // Faz com que o CustomNavigationBar seja utilizado, dando a opção de cabeçalho de navegação.
                 header: (props) => <CustomNavigationBar {...props} />,

@@ -51,7 +51,7 @@ const EstabelecimentoComponent = ({ route }) => {
     // Estados para fontes, aba ativa, avaliação, usuário e cidade
     const [fontesCarregadas, setFontesCarregadas] = useState(false);
     const [abaIndex, setAbaIndex] = useState(0);
-    const [avaliacao, setAvaliacao] = useState(null);
+    const [avaliacao, setAvaliacao] = useState("");
     const [usuario, setUsuario] = useState({});
     const [cidade, setCidade] = useState("");
     const [espacoDisponivelTabViews, setEspacoDisponivelTabViews] = useState(0);
@@ -75,8 +75,10 @@ const EstabelecimentoComponent = ({ route }) => {
             } catch (e) { console.error(e); }
 
             try {
-                let dadosCidade = await AsyncStorage.getItem("local");
-                setCidade(JSON.parse(dadosCidade));
+                let dadosCidade = await AsyncStorage.getItem("nomeColecao");
+                // pega o que esta em JSON e transforma em string ou o contrario
+                console.log("dadosCidade dadosCidade info= ", dadosCidade + " tipo = "+ typeof(dadosCidade));
+                setCidade(dadosCidade);
             } catch (e) { console.error(e); }
         }
         carregarConfiguracoes();
@@ -88,7 +90,7 @@ const EstabelecimentoComponent = ({ route }) => {
     console.log("C=EstabelecimentoComponent whatsapp=" + newLocal.whatsapp)
 
     // Cria instância do estabelecimento com os dados recebidos por parâmetro
-    const estabelecimento = new Estabelecimento(
+    const [estabelecimento, setEstabelecimento]  = useState(new Estabelecimento(
         newLocal.nome,
         newLocal.localizacao,
         newLocal.descricao,
@@ -101,7 +103,7 @@ const EstabelecimentoComponent = ({ route }) => {
         newLocal.userInstagram,
         newLocal.whatsapp,
         newLocal.id
-    );
+    ));
 
     // Atualiza avaliações no Firestore quando o valor da nota muda
     useEffect(() => {
@@ -115,12 +117,17 @@ const EstabelecimentoComponent = ({ route }) => {
         if (avaliacaoExistente) {
             alert("Você já avaliou esse estabelecimento");
         } else {
-            await estabelecimento.avaliacao.push({ user: usuario.uid, avaliacao: avaliacao });
+            const estabelecimentoCopia = estabelecimento;
+            await estabelecimentoCopia.avaliacao.push({ user: usuario.nome, avaliacao: avaliacao });
+            console.log("C= EstabelecimentoComponent atualizarAvaliacao: ");
+            console.log(usuario);
             let idLocal = newLocal.id;
             try {
+                console.log("Atualizar avaliacao cidade=", cidade)
                 await updateDoc(doc(db, cidade, "Estabelecimentos"), {
-                    [idLocal]: estabelecimento
-                });
+                    [`${idLocal}.avaliacao`]: estabelecimentoCopia.avaliacao 
+                });  
+
             } catch (e) {
                 console.error(e);
             }
@@ -159,6 +166,29 @@ const EstabelecimentoComponent = ({ route }) => {
         }
     };
     
+    const updateComentarios = (texto, nome, timestamp, indice)=> {
+        let copia = newLocal;
+        copia.comentarios[indice]=[nome, texto, timestamp];
+        setEstabelecimento(new Estabelecimento(
+        copia.nome,
+        copia.localizacao,
+        copia.descricao,
+        copia.fotos,
+        copia.videos,
+        copia.comentarios,
+        copia.avaliacao,
+        copia.categoria,
+        copia.imagemCapa,
+        copia.userInstagram,
+        copia.whatsapp,
+        copia.id
+    ));
+        console.debug("A= Copia Teste", copia);
+    }
+
+    //const [stateEstabelecimento, setStateEstabelecimento] = useState(estabelecimento);
+
+
     return (
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
             {/* Modal de avaliação */}
@@ -172,7 +202,7 @@ const EstabelecimentoComponent = ({ route }) => {
                         color="#00B37E"
                         starStyle={{ marginHorizontal: 5 }}
                     />
-                    <Button mode="contained" style={{ marginTop: 20 }} onPress={hideModal}>Fechar</Button>
+                    <Button mode="contained" style={{ marginTop: 20 }} onPress={() => hideModal()}>Fechar</Button>
                 </Modal>
             </Portal>
 
@@ -202,7 +232,7 @@ const EstabelecimentoComponent = ({ route }) => {
                     </View>
                     {/* Botões para abrir modal de avaliação e mapa */}
                     <View style={styles.botoesContainer}>
-                        <TouchableOpacity style={styles.botaoPersonalizado} onPress={abreAvaliacao}>
+                        <TouchableOpacity style={styles.botaoPersonalizado} onPress={() => abreAvaliacao()}>
                             <Text style={styles.textoBotao}>Avaliar</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.botaoPersonalizado]} onPress={() => abreMapa(estabelecimento.getLocalizacao())}>
@@ -234,7 +264,7 @@ const EstabelecimentoComponent = ({ route }) => {
                     <Videos style={{ width: '100%', flex: 1, margin:5 }} videos={estabelecimento.getVideos()} />
                 </TabView.Item>
                 <TabView.Item style={{ width: '100%', flex: 1 }}>
-                    <Comentarios comentarios={estabelecimento.getComentarios()} idEstabelecimento={estabelecimento.id} />
+                    <Comentarios comentarios={estabelecimento.getComentarios().sort().reverse()} idEstabelecimento={estabelecimento.id} updateComentarios={updateComentarios} />
                 </TabView.Item>
             </TabView>
         </View>

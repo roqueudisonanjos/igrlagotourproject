@@ -12,7 +12,6 @@ const Header = ({image, nomeColecao, mudaColecao, abrirPerfilMethod, goToLogin})
     // Lista de cidades disponíveis para seleção
     const cidades = [
         "Tucuruí-Pará-Brasil", 
-        "Novo Repartimento-Pará-Brasil", 
         "Breu Branco-Pará-Brasil", 
         "Goianésia-Pará-Brasil", 
         "Jacundá-Pará-Brasil", 
@@ -41,7 +40,7 @@ const Header = ({image, nomeColecao, mudaColecao, abrirPerfilMethod, goToLogin})
 
             <TouchableOpacity style={{flexDirection: 'row'}} 
                 onPress={() => setModalLocal(true)}>
-                <Entypo name="location-pin" size={24} color="black" />
+                <Entypo name="location-pin" size={22} color="black" />
                 <Text style={styles.headerTitle}>{nomeColecao!==null ? nomeColecao.split("-")[0] : "Escolha uma cidade"}</Text>
             </TouchableOpacity>
 
