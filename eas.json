@@ -4,16 +4,25 @@
   },
   "build": {
     "production": {
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "NPM_CONFIG_FROZEN_LOCKFILE": "false"
       },
       "node": "18.18.0"
     },
     "development": {
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "NPM_CONFIG_FROZEN_LOCKFILE": "false"
       },
       "node": "18.18.0"
     }
+  },
+  "submit": {
+    "production": {}
   }
 }

@@ -43,8 +43,6 @@ const Comentarios = ({ comentarios, idEstabelecimento, updateComentarios }) => {
             if(usuario!==null) {
                let usuarioJson = JSON.parse(usuario);
                if (!snap.exists()) return;
-                
-                const data = snap.data();
                 //const comentarios = data?.comentarios || {};
                 // Pega próximo índice do comentário
                 //const novoIndice = comentarios.length; // último número + 1
@@ -64,11 +62,7 @@ const Comentarios = ({ comentarios, idEstabelecimento, updateComentarios }) => {
         catch(e){
             console.error(e);
         }  
-    
-
-        
     }
-
 
 
     const containerStyle = {backgroundColor: 'white', padding: 20};
