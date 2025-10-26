@@ -12,11 +12,11 @@ const Roteiros = ({ roteiros }) => {
 
     // Função executada quando um roteiro específico é clicado pelo usuário.
     const clickCard = (roteiroClicado) => {
-        console.log("C=RoteirosRoute roteiroClicado=" + roteiroClicado.fotos)
+        ////console.log("C=RoteirosRoute roteiroClicado=" + roteiroClicado.fotos)
         navigation.navigate("GuiasTuristicos", { roteiro: roteiroClicado })
     }
 
-    console.log("C=RoteirosRoute roteiros=" + roteiros); 
+    ////console.log("C=RoteirosRoute roteiros=" + roteiros); 
 
     // Renderização de telas
     return (

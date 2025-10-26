@@ -15,7 +15,7 @@ const Imagens = ({ imagens }) => {
         setSelectedImage(null);
     };
 
-    console.log(imagens);
+    ////console.log(imagens);
 
     // Função auxiliar fora do JSX
     const chunkArray = (array, tamanho) => {

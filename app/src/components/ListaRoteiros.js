@@ -6,16 +6,17 @@ const ListaRoteiros = ({roteiros, clickCard}) =>{
     return(
         // FlatList com informações dos roteiros
         <FlatList
-           style={{ marginBottom: 90 }}
+            key={item=> item.index}
+            style={{ marginBottom: 90 }}
             data={roteiros}
-            keyExtractor={item => item.index}
+            //keyExtractor={item => item.index}
             contentContainerStyle={styles.listaEstabelecimentos}
             renderItem={(item)=>{
                 // Função que renderiza cada elemento da lista
                 let itemIteravel = item.item;
                 return(
                     // Card com função de clique e estilos atribuidos
-                    <Card onPress={() => clickCard(itemIteravel)} mode="outlined" style={styles.estiloCard}>
+                    <Card key={item=> item.index} onPress={() => clickCard(itemIteravel)} mode="outlined" style={styles.estiloCard}>
                         <Card.Cover style={styles.estiloCardCover} source={{ uri: itemIteravel.fotoCapa }} />
                         <View style={styles.cardContent}>
                             <Text style={styles.estiloTitulo}>{itemIteravel.nome}</Text>

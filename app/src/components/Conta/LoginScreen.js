@@ -50,15 +50,15 @@ const LoginScreen = ({navigation}) => {
                         await AsyncStorage.setItem("user",JSON.stringify(usuario));
                         navigation.navigate("MainComponent")
                     } else {
-                        console.log("Nenhum documento encontrado!");
+                        ////console.log("Nenhum documento encontrado!");
                     }
                 } catch (error) {
-                    console.error("Erro ao recuperar documento:", error);
+                    //console.error("Erro ao recuperar documento:", error);
                 }
 
             })
             .catch(error => {
-                console.error(error)
+                //console.error(error)
                 alert('Falha no login')
             })
     }
@@ -73,13 +73,13 @@ const LoginScreen = ({navigation}) => {
             const isNewUser = additionalUserInfo.isNewUser;
             const user = result.user;
     
-            console.log("isNewUser: "+isNewUser);
+            ////console.log("isNewUser: "+isNewUser);
     
             // This gives you a Facebook Access Token. You can use it to access the Facebook API.
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const accessToken = credential.accessToken;
             
-            console.log("loginGoogle accessToken="+accessToken)
+            ////console.log("loginGoogle accessToken="+accessToken)
     
             await AsyncStorage.setItem('user', user.uid);
     
@@ -91,7 +91,7 @@ const LoginScreen = ({navigation}) => {
             // Faça algo com as informações do usuário
           })
           .catch((error) => {
-            console.log(error);
+            ////console.log(error);
           });
     }
     **/

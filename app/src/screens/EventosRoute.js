@@ -26,7 +26,7 @@ const EventosRoute = ({ eventos, localUser }) => {
         if (eventos && eventos.length > 0) {
             setResultadoPesquisa(eventos); // Inicializa o resultado com todos os eventos
         } else {
-            console.log("Nenhum evento recebido.");
+            ////console.log("Nenhum evento recebido.");
         }
     }, [eventos]);
 // Captura largura e altura da tela para uso em layout responsivo
@@ -57,7 +57,7 @@ const EventosRoute = ({ eventos, localUser }) => {
             // Navega para EventosComponent passando o evento selecionado como parâmetro
             navigation.navigate('EventosComponent', { evento });
         } else {
-            console.log(`Evento com ID ${id} não encontrado.`);
+            ////console.log(`Evento com ID ${id} não encontrado.`);
         }
     };
    

@@ -21,7 +21,7 @@ import Videos from "./Videos";
 
 // Componente principal que renderiza os detalhes do estabelecimento selecionado
 const EstabelecimentoComponent = ({ route }) => {
-    console.log(route)
+    ////console.log(route)
     const windowDimensions = useWindowDimensions();
     // Configura o título da tela com o nome do estabelecimento
     const navigation = useNavigation();
@@ -77,7 +77,7 @@ const EstabelecimentoComponent = ({ route }) => {
             try {
                 let dadosCidade = await AsyncStorage.getItem("nomeColecao");
                 // pega o que esta em JSON e transforma em string ou o contrario
-                console.log("dadosCidade dadosCidade info= ", dadosCidade + " tipo = "+ typeof(dadosCidade));
+                ////console.log("dadosCidade dadosCidade info= ", dadosCidade + " tipo = "+ typeof(dadosCidade));
                 setCidade(dadosCidade);
             } catch (e) { console.error(e); }
         }
@@ -86,8 +86,8 @@ const EstabelecimentoComponent = ({ route }) => {
      // Recebe dados do estabelecimento pela rota
     const { local } = route.params;
     const newLocal = local[0];
-    console.log("C=EstabelecimentoComponent userInstagram=" + newLocal.userInstagram)
-    console.log("C=EstabelecimentoComponent whatsapp=" + newLocal.whatsapp)
+    ////console.log("C=EstabelecimentoComponent userInstagram=" + newLocal.userInstagram)
+    ////console.log("C=EstabelecimentoComponent whatsapp=" + newLocal.whatsapp)
 
     // Cria instância do estabelecimento com os dados recebidos por parâmetro
     const [estabelecimento, setEstabelecimento]  = useState(new Estabelecimento(
@@ -119,17 +119,17 @@ const EstabelecimentoComponent = ({ route }) => {
         } else {
             const estabelecimentoCopia = estabelecimento;
             await estabelecimentoCopia.avaliacao.push({ user: usuario.nome, avaliacao: avaliacao });
-            console.log("C= EstabelecimentoComponent atualizarAvaliacao: ");
-            console.log(usuario);
+            ////console.log("C= EstabelecimentoComponent atualizarAvaliacao: ");
+            ////console.log(usuario);
             let idLocal = newLocal.id;
             try {
-                console.log("Atualizar avaliacao cidade=", cidade)
+                ////console.log("Atualizar avaliacao cidade=", cidade)
                 await updateDoc(doc(db, cidade, "Estabelecimentos"), {
                     [`${idLocal}.avaliacao`]: estabelecimentoCopia.avaliacao 
                 });  
 
             } catch (e) {
-                console.error(e);
+                //console.error(e);
             }
         }
         hideModal();
@@ -183,7 +183,7 @@ const EstabelecimentoComponent = ({ route }) => {
         copia.whatsapp,
         copia.id
     ));
-        console.debug("A= Copia Teste", copia);
+        //console.debug("A= Copia Teste", copia);
     }
 
     //const [stateEstabelecimento, setStateEstabelecimento] = useState(estabelecimento);

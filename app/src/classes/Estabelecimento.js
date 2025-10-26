@@ -15,11 +15,11 @@ class Estabelecimento{
         
         for(const item in comentarios){
             this.comentarios.push(new Comentario(comentarios[item][0], comentarios[item][1], comentarios[item][2]));
-            //console.log(item);
+            ////console.log(item);
         }
-        console.log(comentarios);
-        console.log("C=Estabelecimento avaliacao=");
-        console.log(avaliacao);
+        //console.log(comentarios);
+        //console.log("C=Estabelecimento avaliacao=");
+        //console.log(avaliacao);
         this.avaliacao=avaliacao;
         this.categoria=categoria;
         this.imagemCapa=imagemCapa;
@@ -45,17 +45,17 @@ class Estabelecimento{
     getAvaliacao(){
         //Fazendo o calculo para tirar a média das avaliações
         var soma=0;
-        console.log("C=Estabelecimento M=getAvaliacao avaliacoes="+this.avaliacao);
+        //console.log("C=Estabelecimento M=getAvaliacao avaliacoes="+this.avaliacao);
         try{
             for(const element in this.avaliacao){
-                console.log("C=Estabelecimento M=getAvaliacao avaliacao="+this.avaliacao[element].avaliacao);
+                //console.log("C=Estabelecimento M=getAvaliacao avaliacao="+this.avaliacao[element].avaliacao);
                 soma+= Number(this.avaliacao[element].avaliacao);
             };
-            console.log("C=Estabelecimento M=getAvaliacao soma="+soma);
+            //console.log("C=Estabelecimento M=getAvaliacao soma="+soma);
             const media = soma/this.avaliacao.length;
             return (media.toFixed(1));
         }catch(e){
-            console.log("C=EstabelecimentoComponent.Estabelecimento"+e);
+            //console.log("C=EstabelecimentoComponent.Estabelecimento"+e);
         }
     }
     getCategoria(){

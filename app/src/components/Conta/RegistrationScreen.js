@@ -39,9 +39,9 @@ const RegistrationScreen = ({navigation}) => {
                 imagemPerfil: imageNewUserDefault,
                 email: email
             });
-            console.log("C=RegistrationScreen M=criaUserNoBanco m=Usuário criado!")
+            ////console.log("C=RegistrationScreen M=criaUserNoBanco m=Usuário criado!")
         } catch (e) {
-            console.error("Erro ao adicionar: ", e);
+            //console.error("Erro ao adicionar: ", e);
         }
     }
     // Função chamada no botão de criar conta e verificação de senhas
@@ -59,8 +59,8 @@ const RegistrationScreen = ({navigation}) => {
             await criaUserNoBanco(uid);
             // Criando objeto com informações do usuário sendo setadas
             const objetoUser = {uid :uid, nome: fullName, email: email, imagemPerfil: imageNewUserDefault};
-            console.log("C=RegistrationScreen M=onRegisterPress objetoUser="+objetoUser)
-            console.log(objetoUser);
+            ////console.log("C=RegistrationScreen M=onRegisterPress objetoUser="+objetoUser)
+            ////console.log(objetoUser);
             // Salva o login do usuário na memória local do aparelho
             await AsyncStorage.setItem("user", JSON.stringify(objetoUser));
             // Redireciona para a tela principal do app

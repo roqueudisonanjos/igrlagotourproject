@@ -7,7 +7,7 @@
       "web"
     ],
     "jsEngine": "hermes",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "name": "igrlagotour",
     "slug": "igr-lago-tour",
     "version": "1.0.0",

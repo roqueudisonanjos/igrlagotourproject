@@ -23,7 +23,7 @@ const Header = ({image, nomeColecao, mudaColecao, abrirPerfilMethod, goToLogin})
     const escolheCidade = async (cidade) =>{
         // Salva a cidade escolhida no armazenamento local
         await AsyncStorage.setItem("nomeColecao", cidade);
-        console.log("Header cidade="+cidade);
+        ////console.log("Header cidade="+cidade);
         // Atualiza o MainComponent com a cidade selecionada
         mudaColecao(cidade);
         setModalLocal(false);
@@ -52,7 +52,7 @@ const Header = ({image, nomeColecao, mudaColecao, abrirPerfilMethod, goToLogin})
                 >
                 <TouchableWithoutFeedback onPress={() =>setModalMenu(false)}>
                     <View style={styles.modalOverlay}>
-                        <TouchableWithoutFeedback onPress={() => {}}>
+                        <TouchableWithoutFeedback>
                             <View>
                                 <Menu abrirPerfilMethod={abrirPerfilMethod} goToLogin={goToLogin}/>
                                 <TouchableOpacity
@@ -86,7 +86,7 @@ const Header = ({image, nomeColecao, mudaColecao, abrirPerfilMethod, goToLogin})
                     setModalLocal(false);
                 }}>
                     <View style={styles.modalOverlay}>
-                        <TouchableWithoutFeedback onPress={() => {}}>
+                        <TouchableWithoutFeedback>
                             <View style={styles.cityModalContainer}>
                                 <FlatList
                                     data={cidades}

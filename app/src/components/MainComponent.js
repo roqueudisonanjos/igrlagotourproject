@@ -18,13 +18,14 @@ import FloatingMenu from './FloatingMenu'; // Importando o FloatingMenu
 // Componente de menu flutuante que controla a troca de telas
 const MainComponent = ({navigation}) => {
   // Função para abrir tela de perfil
+  console.log("navigation: "+navigation);
   const abrirPerfil = ()=>{
     navigation.navigate("Perfil");
   }
   // Função para ir para tela de login
   const goToLogin = ()=>{
     navigation.navigate("Login");
-    console.log("C=MainComponent M=goToLogin m=Voltando para tela de Login")
+    ////console.log("C=MainComponent M=goToLogin m=Voltando para tela de Login")
   }
 
   /*
@@ -37,10 +38,10 @@ const MainComponent = ({navigation}) => {
     for (const campo in campos){ // Percorrendo todos os campos e inserindo no array de estabelecimentos
       // Passando um push para o estabelecimento, pegando o id do banco de dados
       estabelecimentosBanco.push({id:campo, ...campos[campo]});  
-      console.log("C=MainCOmponent Teste Atualização", campos[campo])
+      ////console.log("C=MainCOmponent Teste Atualização", campos[campo])
     }
     setEstabelecimentos(campos);
-    console.debug("C=MainCOmponent Teste Atualização", typeof(campos));
+    //console.debug("C=MainCOmponent Teste Atualização", typeof(campos));
   } */
 
   // Controla a tela ativa, sendo atualizado de forma dinamica
@@ -113,8 +114,8 @@ const MainComponent = ({navigation}) => {
       snapShot.forEach((doc)=>{
           if (doc.id==="Estabelecimentos"){
             campos = doc.data();  // Campo com todos os estabelecimentos
-            console.log('C=MainComponent  campos=');
-            console.log(campos);
+            ////console.log('C=MainComponent  campos=');
+            ////console.log(campos);
             for (const campo in campos){ // Percorrendo todos os campos e inserindo no array de estabelecimentos
               // Passando um push para o estabelecimento, pegando o id do banco de dados
               estabelecimentosBanco.push({id:campo, ...campos[campo]});  
@@ -147,9 +148,9 @@ const MainComponent = ({navigation}) => {
       setRoteirosTuristicos(roteirosTuristicosBanco);
 
     } catch (error) {    
-        console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity e="+error);
-        console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity DB="+DB);
-        console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity app="+nomeColecao);
+        //console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity e="+error);
+        //console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity DB="+DB);
+        //console.error("C=MainComponent M=loadAllItemsFromCollectionOfMyCity app="+nomeColecao);
     }
   }
 
@@ -178,7 +179,7 @@ const MainComponent = ({navigation}) => {
           setCategorias(categorias.nome) 
       }
       catch(e){
-          console.error("erro ao recuperar categorias. e="+e);
+          //console.error("erro ao recuperar categorias. e="+e);
       }
   }
 
@@ -190,15 +191,15 @@ const MainComponent = ({navigation}) => {
       // Laço para verificação e tratamento das informações do usuário na memoria local
       if (usuarioOnStorage!==null) {
         const usuario = usuarioOnStorage ? JSON.parse(usuarioOnStorage) : null;
-        console.log("C=MainComponent M=getUser m=Usuário encontrado usuario=");
-        console.log(usuario);
+        ////console.log("C=MainComponent M=getUser m=Usuário encontrado usuario=");
+        ////console.log(usuario);
         // Atualiza o estado com os valores do usuario
         setUser(usuario);
       } else {
-        console.log("C=MainComponent M=getUser m=Nenhum usuário encontrado!");
+        ////console.log("C=MainComponent M=getUser m=Nenhum usuário encontrado!");
       }
     } catch (error) {
-      console.error("C=MainComponent M=getUser Erro ao setar usuário:", error);
+      //console.error("C=MainComponent M=getUser Erro ao setar usuário:", error);
     }
   }
 
@@ -219,7 +220,7 @@ const MainComponent = ({navigation}) => {
 
   const getNomeColecaoFromStorage = async ()=>{
     const nomeColecaoCache = await AsyncStorage.getItem("nomeColecao")
-    console.log('C=MainComponent nomeColecaoCache='+nomeColecaoCache);
+    ////console.log('C=MainComponent nomeColecaoCache='+nomeColecaoCache);
     setNomeColecao(nomeColecaoCache);
   }
 
@@ -236,8 +237,8 @@ const MainComponent = ({navigation}) => {
 
 
   useEffect(()=>{
-    console.log("cidade escolhida")
-    console.log(nomeColecao)
+    ////console.log("cidade escolhida")
+    ////console.log(nomeColecao)
     if(nomeColecao!=="" && nomeColecao!=null) {
       loadAllItemsFromCollectionOfMyCity();
     }
@@ -260,7 +261,7 @@ const MainComponent = ({navigation}) => {
   },[location])
 
   const mudaColecao = async (cidade) =>{
-    console.log("entrou no log aqui"+cidade);
+    ////console.log("entrou no log aqui"+cidade);
     // Seta o nome da coleção de acordo com a cidade escolhida
     setNomeColecao(cidade);
     await AsyncStorage.setItem("nomeColecao", nomeColecao);

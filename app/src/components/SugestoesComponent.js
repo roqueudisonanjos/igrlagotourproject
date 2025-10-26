@@ -19,8 +19,8 @@ const SugestoesComponent = ({sugestoes, estabelecimentos, localUser, clickCard})
     return estabelecimentosLista;
   }
   useEffect(()=>{
-    console.log("sugestoes abaixo")
-    console.log(sugestoes)
+    ////console.log("sugestoes abaixo")
+    ////console.log(sugestoes)
   }, [])
 
   return (
@@ -30,8 +30,8 @@ const SugestoesComponent = ({sugestoes, estabelecimentos, localUser, clickCard})
       keyExtractor={(_, index)=> index}
       renderItem={(i)=>{
         const item = i.item;
-        console.log("C=SugestoesComponent item=")
-        console.log(item);
+        ////console.log("C=SugestoesComponent item=")
+        ////console.log(item);
         return(
           <Card onPress={()=>clickCard(item.id)} mode="outlined" style={styles.estiloCard}>
               {/* Verifique se fotos existem antes de tentar acessá-las */}

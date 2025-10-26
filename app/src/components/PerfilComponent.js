@@ -37,7 +37,7 @@ const PerfilComponent=({navigation})=>{
             try{
                 // Recupera os dados do usuário
                 const usuario = await AsyncStorage.getItem("user");
-                console.log("C=PerfilComponent m=pegaUser usuario="+usuario);
+                ////console.log("C=PerfilComponent m=pegaUser usuario="+usuario);
                 // Converte os dados do usuário em um objeto JSON
                 if(usuario!==null) {
                     // Atualiza os estados de usuário e imagem
@@ -48,7 +48,7 @@ const PerfilComponent=({navigation})=>{
                 }
             }
             catch(e){
-                console.error(e);
+                //console.error(e);
             }  
         }
         pegaUser();
@@ -62,7 +62,7 @@ const PerfilComponent=({navigation})=>{
           quality: 1,
         });
         // Se o usuário escolher uma imgem e nao cancelar envia as informações para o Firebase
-        console.log(result);
+        ////console.log(result);
         if (!result.canceled) {
           const img = result.assets[0].uri;
           setImage(img);
@@ -88,7 +88,7 @@ const PerfilComponent=({navigation})=>{
             (snapshot) => {
             },
             (error) => {
-              console.log(error);
+              ////console.log(error);
               reject(error);
             },
             async () => {
@@ -108,7 +108,7 @@ const PerfilComponent=({navigation})=>{
                     });
                     setInProgress(false);
                 } catch (e) {
-                    console.error("Error adding document: ", e);
+                    //console.error("Error adding document: ", e);
                 }
 
             }
@@ -136,7 +136,7 @@ const PerfilComponent=({navigation})=>{
             hideModal();    
         }
         catch(e){
-            console.error(e);
+            //console.error(e);
         }
     }
 

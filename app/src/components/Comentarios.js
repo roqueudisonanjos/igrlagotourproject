@@ -37,9 +37,9 @@ const Comentarios = ({ comentarios, idEstabelecimento, updateComentarios }) => {
             const cidade = await AsyncStorage.getItem("nomeColecao");
             const ref = doc(db, cidade, "Estabelecimentos");
             const snap = await getDoc(ref);
-            console.log("print do snap", snap);
+            ////console.log("print do snap", snap);
             const usuario = await AsyncStorage.getItem("user");
-            console.log("C=EstabelecimentoComponent m=pegaUser usuario="+usuario);
+            ////console.log("C=EstabelecimentoComponent m=pegaUser usuario="+usuario);
             if(usuario!==null) {
                let usuarioJson = JSON.parse(usuario);
                if (!snap.exists()) return;
@@ -50,17 +50,17 @@ const Comentarios = ({ comentarios, idEstabelecimento, updateComentarios }) => {
 
                 const timestamp = Timestamp.now();
                 updateComentarios(texto, usuarioJson.nome, timestamp, date);
-                console.debug("A= Comentarios novo indice: ", date);
-                console.log("comentario efetuado")
+                //console.debug("A= Comentarios novo indice: ", date);
+                ////console.log("comentario efetuado")
                 await updateDoc(ref, {
                     [`${idEstabelecimento}.comentarios.${date}`]: [usuarioJson.nome, texto, timestamp]
                 });
             } else{
-                console.error("usuário não encontrado")
+                //console.error("usuário não encontrado")
             }
         }
         catch(e){
-            console.error(e);
+            //console.error(e);
         }  
     }
 
