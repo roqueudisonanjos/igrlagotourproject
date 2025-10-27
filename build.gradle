@@ -1,0 +1,55 @@
+// Arquivo raiz de configuração do Gradle do projeto Android
+// Compatível com React Native, Expo 49+ e Kotlin 1.8.x
+
+buildscript {
+    ext {
+        // Versão do Kotlin usada em todos os módulos
+        kotlinVersion = '1.8.10'
+        // Versão do Gradle plugin Android
+        buildToolsVersion = "33.0.2"
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        // Plugin Android Gradle
+        classpath("com.android.tools.build:gradle:8.1.1")
+        // Plugin Kotlin
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        // Plugin expo-modules-core (geralmente o EAS usa internamente)
+        classpath("com.facebook.react:react-native-gradle-plugin")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // Repositório do JCenter (algumas libs antigas ainda dependem)
+        maven { url 'https://www.jitpack.io' }
+    }
+}
+
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+                kotlinOptions {
+                    jvmTarget = "17"
+                }
+            }
+        }
+    }
+}
+
+// Configurações de tarefas globais
+tasks.register("clean", Delete) {
+    delete(rootProject.buildDir)
+}
